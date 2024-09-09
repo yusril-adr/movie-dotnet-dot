@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using dot_dotnet_test_api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ public class LowercaseContractResolver : DefaultContractResolver
   }
 }
 
-public class Response<T>
+public class Response<T>: IResponse<T>
 {
   public bool Success { get; set; } = true;
   public string[]? Errors { get; set; }
@@ -35,7 +36,17 @@ public class Response<T>
     Success = errors == null || errors?.Length < 1;
   }
 
-  public ContentResult GetFormated(int? statusCode = 200)
+  public ContentResult GetFormated(int statusCode = 200)
+  {
+    var jsonResponse = GetFormatedJsonString();
+    return new ContentResult(){
+        Content = jsonResponse,
+        ContentType = "application/json",
+        StatusCode = statusCode,
+    };
+  }
+
+    public string GetFormatedJsonString()
   {
     var settings = new JsonSerializerSettings
     {
@@ -45,11 +56,7 @@ public class Response<T>
 
     // Serialize the object to JSON
     var jsonResponse = JsonConvert.SerializeObject(this, settings);
-    return new ContentResult(){
-        Content = jsonResponse,
-        ContentType = "application/json",
-        StatusCode = statusCode,
-    };
+    return jsonResponse;
   }
 }
 
@@ -74,7 +81,7 @@ public class ValidationErrorResponse : Response<Unit>
 
   public List<ValidationErrorResponseField> Errors { get; set; } = [];
 
-  public new ContentResult GetFormated(int? statusCode = 422) {
+  public new ContentResult GetFormated(int statusCode = StatusCodes.Status422UnprocessableEntity) {
     return base.GetFormated(statusCode);
   }
 

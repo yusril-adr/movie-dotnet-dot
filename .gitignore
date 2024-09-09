@@ -388,3 +388,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+files/images/avatar/*-user.png

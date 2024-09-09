@@ -4,34 +4,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Users")]
-[Index(nameof(Email), IsUnique = true)]
-public class UserV1
+[Table("Movies")]
+public class MovieV1
 {
     [Column("id", TypeName = "bigint")]
     [Key]
     [Required]
     public long Id { get; set; }
 
-    [Column("name", TypeName = "varchar(255)")]
+    [Column("tmdb_id")]
     [Required]
-    public string Name { get; set; } = string.Empty;
+    public int TmdbId { get;set; }
 
-    [Column("email", TypeName = "varchar(255)")]
+    [Column("title", TypeName = "varchar(255)")]
     [Required]
-    public string Email { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
 
-    [Column("password", TypeName = "varchar(255)")]
-    [Required] 
-    public string Password { get; set; } = string.Empty;
-
-    [Column("avatar", TypeName = "varchar(255)")]
+    [Column("overview", TypeName = "text")]
     [Required]
-    public string Avatar { get; set; } = string.Empty;
+    public string Overview { get; set; } = string.Empty;
 
-    [Column("is_admin")]
+    [Column("poster", TypeName = "varchar(255)")]
     [Required]
-    public bool Is_admin { get; set; } = false;
+    public string Poster { get; set; } = string.Empty;
+
+    [Column("play_until")]
+    public DateTime PlayUntil { get; set; } = DateTime.Now;
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
