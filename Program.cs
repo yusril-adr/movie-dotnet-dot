@@ -7,15 +7,17 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using dot_dotnet_test_api.Helpers;
 using dot_dotnet_test_api.Middlewares;
+using dot_dotnet_test_api.Jobs;
+using Quartz;
+using Quartz.Impl;
+using Quartz.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 var connectionString = builder.Configuration.GetConnectionString("SQLServerConnection");
 
 // Add services to the container.
-builder.Services.AddScoped<TokenService, TokenService>();
-
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -73,8 +75,32 @@ builder.Services.AddDbContext<SQLServerContext>(opt =>
     opt.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<AddNowPlayingMovieJob>();
+
+builder.Services.AddQuartz(q =>
+{
+    // Just use the name of your job that you created in the Jobs folder.
+    var jobKey = new JobKey("AddNowPlayingMovieJob");
+    q.AddJob<AddNowPlayingMovieJob>(opts => opts
+        .WithIdentity(jobKey)
+        .UsingJobData("apikey", builder.Configuration["TMDB:key"])
+    );
+    
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        // .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
+        .StartNow()
+        .WithSimpleSchedule(x => x
+            .WithIntervalInSeconds(120)
+            .RepeatForever()
+        )
+    );
+});
+builder.Services.AddQuartzServer(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -116,3 +142,28 @@ app.MapControllers();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();
+
+using var scope = app.Services.CreateScope();
+
+StdSchedulerFactory factory = new StdSchedulerFactory();
+IScheduler scheduler = await factory.GetScheduler();
+
+IJobDetail job = JobBuilder.Create<AddNowPlayingMovieJob>()
+ .WithIdentity("AddNowPlayingMovieJob", "movies") // name "AddNowPlayingMovieJob", group "movies"
+ .UsingJobData("apikey", builder.Configuration["TMDB:key"])
+ .Build();
+
+Console.WriteLine(DateTime.Now);
+ITrigger trigger = TriggerBuilder.Create()
+  .WithIdentity("AddNowPlayingMovieJob", "movies")
+  .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
+  .StartNow()
+  .WithSimpleSchedule(x => x
+    .WithIntervalInSeconds(1)
+    .RepeatForever()
+  )
+  .ForJob(job)
+  .Build();
+
+await scheduler.ScheduleJob(job, trigger);
+await scheduler.Start();

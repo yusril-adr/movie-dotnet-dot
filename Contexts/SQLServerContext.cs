@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using dot_dotnet_test_api.Models;
 using dot_dotnet_test_api.Helpers;
-using RestSharp;
 
 namespace dot_dotnet_test_api.Contexts;
 
@@ -10,7 +9,6 @@ public class SQLServerContext : DbContext
     public SQLServerContext(DbContextOptions<SQLServerContext> options)
         : base(options)
     {
-
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
