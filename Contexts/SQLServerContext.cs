@@ -29,8 +29,7 @@ public class SQLServerContext : DbContext
         modelBuilder.Entity<MovieV1>().HasData(
             new MovieV1
             {
-                Id = 1,
-                TmdbId = 9981,
+                Id = 9981, // Get from TMDB API
                 Title = "Avengers: Age of Ultron",
                 Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
                 Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",

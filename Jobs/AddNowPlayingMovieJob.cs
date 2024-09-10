@@ -35,11 +35,24 @@ namespace dot_dotnet_test_api.Jobs
       request.AddHeader("Authorization", $"Bearer {tokenkey}");
       var response = await client.GetAsync(request);
       var data = JsonConvert.DeserializeObject<ITMDBNowPlaying>(response!.Content!);
-      var movieList = data.Results;
+      var movieList = data!.Results;
+      MovieV1[] formatedMovieList = new MovieV1[movieList.Length];
 
-      _DbContext.BulkInsertOrUpdateAsync<MovieV1>(movieList);
+      int i = 0;
+      foreach (var movie in movieList)
+      {
+        var mov = new MovieV1(){
+          Id = movie.TmdbId,
+          Poster = $"https://image.tmdb.org/t/p/original{movie.BackdropPath}",
+          Title = movie.Title,
+          Overview = movie.Overview,
+          UpdatedAt = DateTime.Now,
+        };
 
-      _logger.LogInformation("{0}", data.Results[0].BackdropPath);
+        formatedMovieList[i++] = mov;
+      }
+      await _DbContext.BulkInsertOrUpdateAsync(formatedMovieList);
+
       _logger.LogInformation("Job Finish");
     }
   }

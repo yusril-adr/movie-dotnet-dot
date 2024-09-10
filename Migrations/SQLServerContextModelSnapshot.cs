@@ -24,24 +24,21 @@ namespace dot_dotnet_test_api.Migrations
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.MovieV1", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
-                    b.Property<DateTime>("DeletedAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Overview")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("NVARCHAR(MAX)")
                         .HasColumnName("overview");
 
                     b.Property<DateTime>("PlayUntil")
@@ -58,10 +55,6 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("title");
 
-                    b.Property<int>("TmdbId")
-                        .HasColumnType("int")
-                        .HasColumnName("tmdb_id");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
@@ -73,15 +66,13 @@ namespace dot_dotnet_test_api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 9, 10, 43, 7, 494, DateTimeKind.Local).AddTicks(7380),
-                            DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 9981,
+                            CreatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 788, DateTimeKind.Local).AddTicks(4510),
                             Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
-                            PlayUntil = new DateTime(2024, 9, 9, 10, 43, 7, 494, DateTimeKind.Local).AddTicks(7380),
+                            PlayUntil = new DateTime(2024, 9, 10, 9, 26, 19, 788, DateTimeKind.Local).AddTicks(4500),
                             Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
                             Title = "Avengers: Age of Ultron",
-                            TmdbId = 9981,
-                            UpdatedAt = new DateTime(2024, 9, 9, 10, 43, 7, 494, DateTimeKind.Local).AddTicks(7380)
+                            UpdatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 788, DateTimeKind.Local).AddTicks(4510)
                         });
                 });
 
@@ -164,13 +155,13 @@ namespace dot_dotnet_test_api.Migrations
                         {
                             Id = 1L,
                             Avatar = "./files/images/avatar/example.png",
-                            CreatedAt = new DateTime(2024, 9, 9, 10, 43, 7, 485, DateTimeKind.Local).AddTicks(990),
+                            CreatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 777, DateTimeKind.Local).AddTicks(5600),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@getnada.com",
                             Is_admin = false,
                             Name = "user test",
-                            Password = "fLXd0lWmCyjBU4Qfc3BaXOq7ASGgrTg4fpeTeXldXoUntGnQToy2VhxIwfvfup4F",
-                            UpdatedAt = new DateTime(2024, 9, 9, 10, 43, 7, 485, DateTimeKind.Local).AddTicks(1020)
+                            Password = "k6dxTvBuhiPgAmrBs3pOBAoTOYPt239jynfV2YFj7F7G6n6pzCbIU69Vi/iZ8q8Y",
+                            UpdatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 777, DateTimeKind.Local).AddTicks(5630)
                         });
                 });
 #pragma warning restore 612, 618

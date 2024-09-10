@@ -89,12 +89,12 @@ builder.Services.AddQuartz(q =>
     
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
-        // .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
-        .StartNow()
-        .WithSimpleSchedule(x => x
-            .WithIntervalInSeconds(120)
-            .RepeatForever()
-        )
+        .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
+        // .StartNow()
+        // .WithSimpleSchedule(x => x
+        //     .WithIntervalInSeconds(120)
+        //     .RepeatForever()
+        // )
     );
 });
 builder.Services.AddQuartzServer(q => q.WaitForJobsToComplete = true);

@@ -7,20 +7,17 @@ namespace dot_dotnet_test_api.Models;
 [Table("Movies")]
 public class MovieV1
 {
-    [Column("id", TypeName = "bigint")]
+    [Column("id")]
     [Key]
     [Required]
-    public long Id { get; set; }
-
-    [Column("tmdb_id")]
-    [Required]
-    public int TmdbId { get;set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public int Id { get;set; }
 
     [Column("title", TypeName = "varchar(255)")]
     [Required]
     public string Title { get; set; } = string.Empty;
 
-    [Column("overview", TypeName = "text")]
+    [Column("overview", TypeName = "NVARCHAR(MAX)")]
     [Required]
     public string Overview { get; set; } = string.Empty;
 
@@ -36,5 +33,5 @@ public class MovieV1
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
     [Column("deleted_at")]
-    public DateTime DeletedAt { get; set; }
+    public DateTime? DeletedAt { get; set; } = null;
 }
