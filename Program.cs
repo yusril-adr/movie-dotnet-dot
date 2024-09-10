@@ -57,6 +57,31 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Events = new JwtBearerEvents
+        {
+            OnChallenge = (context) =>
+            {
+                Console.WriteLine("Im here");
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = (context) =>
+            {
+                // var unAuthorizedresponse = new Response<object>(
+                //     data: null,
+                //     errors: ["Unauthorized"],
+                //     message: "Unauthorized"
+                // );
+
+                // context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                // await context.Response.WriteAsJsonAsync(
+                //     unAuthorizedresponse
+                // );
+                context.HttpContext.Response.Redirect("/login");
+                Console.WriteLine("Im here");
+                return Task.CompletedTask;
+            }
+        };
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -89,12 +114,12 @@ builder.Services.AddQuartz(q =>
     
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
-        .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
-        // .StartNow()
-        // .WithSimpleSchedule(x => x
-        //     .WithIntervalInSeconds(120)
-        //     .RepeatForever()
-        // )
+        // .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
+        .StartNow()
+        .WithSimpleSchedule(x => x
+            .WithIntervalInSeconds(120)
+            .RepeatForever()
+        )
     );
 });
 builder.Services.AddQuartzServer(q => q.WaitForJobsToComplete = true);
@@ -142,28 +167,3 @@ app.MapControllers();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();
-
-using var scope = app.Services.CreateScope();
-
-StdSchedulerFactory factory = new StdSchedulerFactory();
-IScheduler scheduler = await factory.GetScheduler();
-
-IJobDetail job = JobBuilder.Create<AddNowPlayingMovieJob>()
- .WithIdentity("AddNowPlayingMovieJob", "movies") // name "AddNowPlayingMovieJob", group "movies"
- .UsingJobData("apikey", builder.Configuration["TMDB:key"])
- .Build();
-
-Console.WriteLine(DateTime.Now);
-ITrigger trigger = TriggerBuilder.Create()
-  .WithIdentity("AddNowPlayingMovieJob", "movies")
-  .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
-  .StartNow()
-  .WithSimpleSchedule(x => x
-    .WithIntervalInSeconds(1)
-    .RepeatForever()
-  )
-  .ForJob(job)
-  .Build();
-
-await scheduler.ScheduleJob(job, trigger);
-await scheduler.Start();

@@ -4,7 +4,7 @@ using FluentValidation.Results;
 namespace dot_dotnet_test_api.Helpers;
 public class ValidationHelper
 {
-  public static ContentResult ValidateResponseError(ValidationResult results)
+  public static ContentResult ValidateResponseError(ValidationResult results, string message = "Validation Failed")
   {
     var errors = new List<ValidationErrorResponseField>();
     var properties = new List<string>();
@@ -29,7 +29,7 @@ public class ValidationHelper
     var errorResponse = new ValidationErrorResponse
     {
       Errors = errors,
-      Message = "Registration Failed."
+      Message = message
     };
     return errorResponse.GetFormated();
   }

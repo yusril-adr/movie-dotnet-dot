@@ -30,7 +30,7 @@ namespace dot_dotnet_test_api.Middlewares
                 _logger.LogInformation(ex.Message);
                 var unAuthorizedresponse = new Response<object>(
                     data: null,
-                    errors: ex.Message.Split(";"),
+                    error: "Unauthorized",
                     message: "Unauthorized"
                 );
 
@@ -43,7 +43,7 @@ namespace dot_dotnet_test_api.Middlewares
             {
                 _logger.LogInformation(error.ToString());
                 var response = new Response<object>(
-                    errors: [error.Message],
+                    error: error.Message,
                     message: "Internal Server Error"
                 );
 

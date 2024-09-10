@@ -46,7 +46,7 @@ namespace dot_dotnet_test_api.Controllers
             var validator = new UserV1RegisterDtoValidator();
             ValidationResult results = validator.Validate(userV1RegisterDto);
 
-            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results);
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Registration Failed.");
 
             var splittedFileNames = userV1RegisterDto.Avatar.FileName.Split(".");
             var fileExtension = splittedFileNames[splittedFileNames.Length - 1];
@@ -74,17 +74,12 @@ namespace dot_dotnet_test_api.Controllers
             }
             catch (DbUpdateException error)
             {
-                var errorField = new ValidationErrorResponseField("Email")
-                {
-                    Messages = ["Email is already used."]
-                };
-                var responseSQLException = new ValidationErrorResponse
-                {
-                    Errors = [errorField],
-                    Message = "Register Failed",
-                };
+                var responseSQLException = new Response<object>(
+                    error: "Email already Used",
+                    message: "Register Failed"
+                );
 
-                return responseSQLException.GetFormated(statusCode: StatusCodes.Status409Conflict);
+                return responseSQLException.GetFormated(statusCode: StatusCodes.Status400BadRequest);
             }
 
             var baseUri = $"{Request.Scheme}://{Request.Host}";
@@ -117,18 +112,18 @@ namespace dot_dotnet_test_api.Controllers
             if (foundedUser == null)
             {
                 return new Response<object>(
-                    errors: ["Email or Password Didn't match."],
+                    error: "Email or Password Didn't match.",
                     message: "Login Failed"
-                ).GetFormated(statusCode: 401);
+                ).GetFormated(statusCode: StatusCodes.Status400BadRequest);
             }
 
             var isPasswordValid = PasswordHasher.VerifyPassword(userV1LoginDto.Password, foundedUser.Password);
             if (!isPasswordValid)
             {
                 return new Response<object>(
-                    errors: ["Email or Password Didn't match."],
+                    error: "Email or Password Didn't match.",
                     message: "Login Failed"
-                ).GetFormated(statusCode: 401);
+                ).GetFormated(statusCode: StatusCodes.Status400BadRequest);
             }
 
             var baseUri = $"{Request.Scheme}://{Request.Host}";

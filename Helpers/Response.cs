@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using dot_dotnet_test_api.Interfaces;
+using dot_dotnet_test_api.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Newtonsoft.Json;
@@ -16,37 +17,40 @@ public class LowercaseContractResolver : DefaultContractResolver
   }
 }
 
-public class Response<T>: IResponse<T>
+public class Response<T> : IResponse<T>
 {
   public bool Success { get; set; } = true;
-  public string[]? Errors { get; set; }
+  public string? Error { get; set; } = null;
 
   public string? Message { get; set; }
 
   public T? Data { get; set; }
 
-  public Response(T? data = default, string? message = default, string[]? errors = default)
+  public IPagination? Pagination { get; set; } = null;
+
+  public Response(T? data = default, string? message = default, string? error = default)
   {
     Message = message;
     Data = data;
-    if (errors != null)
+    if (error != null)
     {
-      Errors = errors;
+      Error = error;
     }
-    Success = errors == null || errors?.Length < 1;
+    Success = error == null;
   }
 
   public ContentResult GetFormated(int statusCode = 200)
   {
     var jsonResponse = GetFormatedJsonString();
-    return new ContentResult(){
-        Content = jsonResponse,
-        ContentType = "application/json",
-        StatusCode = statusCode,
+    return new ContentResult()
+    {
+      Content = jsonResponse,
+      ContentType = "application/json",
+      StatusCode = statusCode,
     };
   }
 
-    public string GetFormatedJsonString()
+  public string GetFormatedJsonString()
   {
     var settings = new JsonSerializerSettings
     {
@@ -56,6 +60,54 @@ public class Response<T>: IResponse<T>
 
     // Serialize the object to JSON
     var jsonResponse = JsonConvert.SerializeObject(this, settings);
+    return jsonResponse;
+  }
+}
+
+public class PaginationResponse<T>
+{
+  public bool Success { get; set; } = true;
+
+  public string? Message { get; set; }
+
+  public T? Items { get; set; }
+
+  public IPagination? Pagination { get; set; } = null;
+public PaginationResponse(T items, Pagination pagination, string? message = default)
+  {
+    Message = message;
+    Items = items;
+    Pagination = pagination;
+  }
+
+  public ContentResult GetFormated(int statusCode = 200)
+  {
+    var jsonResponse = GetFormatedJsonString();
+    return new ContentResult()
+    {
+      Content = jsonResponse,
+      ContentType = "application/json",
+      StatusCode = statusCode,
+    };
+  }
+
+  public string GetFormatedJsonString()
+  {
+    var settings = new JsonSerializerSettings
+    {
+      ContractResolver = new LowercaseContractResolver(),
+      NullValueHandling = NullValueHandling.Ignore
+    };
+
+    // Serialize the object to JSON
+    var jsonResponse = JsonConvert.SerializeObject(new {
+      Success = this.Success,
+      Message = this.Message,
+      Data = new {
+        items = this.Items,
+        pagination = this.Pagination,
+      },
+    }, settings);
     return jsonResponse;
   }
 }
@@ -81,7 +133,9 @@ public class ValidationErrorResponse : Response<Unit>
 
   public List<ValidationErrorResponseField> Errors { get; set; } = [];
 
-  public new ContentResult GetFormated(int statusCode = StatusCodes.Status422UnprocessableEntity) {
+  public new ContentResult GetFormated(int statusCode = StatusCodes.Status422UnprocessableEntity)
+  {
+    base.Success = false;
     return base.GetFormated(statusCode);
   }
 

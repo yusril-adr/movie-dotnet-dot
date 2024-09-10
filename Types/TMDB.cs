@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Types
 {
-  public class IMoviePlaying {
+  public class MoviePlaying {
     [JsonProperty("backdrop_path")]
     public string BackdropPath { get; set; }
 
@@ -14,8 +14,8 @@ namespace dot_dotnet_test_api.Types
     public string Overview { get; set; }
   }
 
-  public class ITMDBNowPlaying {
+  public class TMDBNowPlaying {
     [JsonProperty("results")]
-    public IMoviePlaying[] Results { get; set; }
+    public MoviePlaying[] Results { get; set; }
   }
 }

@@ -34,7 +34,7 @@ namespace dot_dotnet_test_api.Jobs
       request.AddHeader("accept", "application/json");
       request.AddHeader("Authorization", $"Bearer {tokenkey}");
       var response = await client.GetAsync(request);
-      var data = JsonConvert.DeserializeObject<ITMDBNowPlaying>(response!.Content!);
+      var data = JsonConvert.DeserializeObject<TMDBNowPlaying>(response!.Content!);
       var movieList = data!.Results;
       MovieV1[] formatedMovieList = new MovieV1[movieList.Length];
 

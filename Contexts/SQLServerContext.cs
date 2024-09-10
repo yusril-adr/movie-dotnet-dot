@@ -35,6 +35,23 @@ public class SQLServerContext : DbContext
                 Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
             }
         );
+
+        // modelBuilder.Entity<TagV1>().HasData(
+        //     new TagV1
+        //     {
+        //         Id = 1,
+        //         Name = "Action",
+        //     }
+        // );
+
+        // modelBuilder.Entity<MovieTagsV1>().HasData(
+        //     new MovieTagsV1
+        //     {
+        //         Id = 1,
+        //         MovieId = 9981,
+        //         TagId = 1,
+        //     }
+        // );
     }
 
 

@@ -22,13 +22,54 @@ namespace dot_dotnet_test_api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("dot_dotnet_test_api.Models.MovieV1", b =>
+            modelBuilder.Entity("dot_dotnet_test_api.Models.MovieTagsV1", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAt")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<long>("MovieId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("movie_id");
+
+                    b.Property<long>("TagId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("tag_id");
+
+                    b.Property<long>("TagId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("TagId1");
+
+                    b.ToTable("Movie_Tags");
+                });
+
+            modelBuilder.Entity("dot_dotnet_test_api.Models.MovieV1", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
@@ -55,7 +96,7 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("title");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
@@ -66,14 +107,45 @@ namespace dot_dotnet_test_api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 9981,
-                            CreatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 788, DateTimeKind.Local).AddTicks(4510),
+                            Id = 9981L,
+                            CreatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 586, DateTimeKind.Local).AddTicks(8950),
                             Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
-                            PlayUntil = new DateTime(2024, 9, 10, 9, 26, 19, 788, DateTimeKind.Local).AddTicks(4500),
+                            PlayUntil = new DateTime(2024, 9, 10, 14, 17, 40, 586, DateTimeKind.Local).AddTicks(8940),
                             Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
                             Title = "Avengers: Age of Ultron",
-                            UpdatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 788, DateTimeKind.Local).AddTicks(4510)
+                            UpdatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 586, DateTimeKind.Local).AddTicks(8950)
                         });
+                });
+
+            modelBuilder.Entity("dot_dotnet_test_api.Models.TagV1", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.TodoItemV1", b =>
@@ -155,14 +227,43 @@ namespace dot_dotnet_test_api.Migrations
                         {
                             Id = 1L,
                             Avatar = "./files/images/avatar/example.png",
-                            CreatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 777, DateTimeKind.Local).AddTicks(5600),
+                            CreatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 576, DateTimeKind.Local).AddTicks(2430),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@getnada.com",
                             Is_admin = false,
                             Name = "user test",
-                            Password = "k6dxTvBuhiPgAmrBs3pOBAoTOYPt239jynfV2YFj7F7G6n6pzCbIU69Vi/iZ8q8Y",
-                            UpdatedAt = new DateTime(2024, 9, 10, 9, 26, 19, 777, DateTimeKind.Local).AddTicks(5630)
+                            Password = "Auje5q9ZIDcuN92i5aWt4f55XbEhCBQ5wKIrh6fS7IrSy1L0aUulEEUl4TWRSttn",
+                            UpdatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 576, DateTimeKind.Local).AddTicks(2470)
                         });
+                });
+
+            modelBuilder.Entity("dot_dotnet_test_api.Models.MovieTagsV1", b =>
+                {
+                    b.HasOne("dot_dotnet_test_api.Models.MovieV1", "Movie")
+                        .WithMany("Tags")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dot_dotnet_test_api.Models.TagV1", "Tag")
+                        .WithMany("MovieTags")
+                        .HasForeignKey("TagId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("dot_dotnet_test_api.Models.MovieV1", b =>
+                {
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("dot_dotnet_test_api.Models.TagV1", b =>
+                {
+                    b.Navigation("MovieTags");
                 });
 #pragma warning restore 612, 618
         }
