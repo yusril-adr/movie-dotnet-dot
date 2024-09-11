@@ -1,8 +1,7 @@
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace dot_dotnet_test_api.Interfaces
-{
+namespace dot_dotnet_test_api.Interfaces;
   public interface IPagination {
     [JsonProperty("page")]
     int Page { get; set; }
@@ -33,4 +32,3 @@ namespace dot_dotnet_test_api.Interfaces
 
     IPagination? Pagination { get; set; }
   }
-}

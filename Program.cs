@@ -11,6 +11,8 @@ using dot_dotnet_test_api.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Quartz.AspNetCore;
+using dot_dotnet_test_api.Interfaces;
+using Coravel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,6 +125,9 @@ builder.Services.AddQuartz(q =>
     );
 });
 builder.Services.AddQuartzServer(q => q.WaitForJobsToComplete = true);
+
+builder.Services.AddQueue();
+builder.Services.AddTransient<EmailInvocable>();
 
 var app = builder.Build();
 

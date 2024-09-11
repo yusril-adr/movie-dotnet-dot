@@ -11,15 +11,18 @@ using EFCore.BulkExtensions;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using NuGet.Protocol;
+using Coravel.Queuing.Interfaces;
 
 namespace dot_dotnet_test_api.Controllers
 {
     [Route("api/v1/order")]
     [ApiController]
-    public class TransactionV1Controller(SQLServerContext context, ILogger<TransactionV1Controller> logger) : ControllerBase
+    public class TransactionV1Controller(SQLServerContext context, ILogger<TransactionV1Controller> logger, IQueue queue) : ControllerBase
     {
         private readonly SQLServerContext _context = context;
         private readonly ILogger<TransactionV1Controller> _logger = logger;
+
+        private readonly IQueue _queue = queue;
 
 
         // POST: api/v1/order/checkout/preview
@@ -44,10 +47,11 @@ namespace dot_dotnet_test_api.Controllers
 
                 var foundedSchedule = await _context.Schedule
                     .Include(x => x.Studio)
-                    .Where(x => x.Id == (long) item.MovieScheduleId)
-                    .SingleOrDefaultAsync();                
-                    
-                if (foundedSchedule == null) {
+                    .Where(x => x.Id == (long)item.MovieScheduleId)
+                    .SingleOrDefaultAsync();
+
+                if (foundedSchedule == null)
+                {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} not found",
                         message: "Preview Order Failed"
@@ -56,7 +60,8 @@ namespace dot_dotnet_test_api.Controllers
 
                 var startTime = DateTime.Parse($"{foundedSchedule.Date.ToString()} {foundedSchedule.StartTime}");
 
-                if (DateTime.Now >= startTime) {
+                if (DateTime.Now >= startTime)
+                {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} already passed.",
                         message: "Preview Order Failed"
@@ -64,30 +69,33 @@ namespace dot_dotnet_test_api.Controllers
                 }
 
                 var shceduleStudioCount = await _context.OrderItems
-                    .Where(x => x.MovieSchedule.Id == (long) item.MovieScheduleId)
+                    .Where(x => x.MovieSchedule.Id == (long)item.MovieScheduleId)
                     .SumAsync(x => x.Qty);
-                
-                if (foundedSchedule.RemainingSeat < item.Qty) {
+
+                if (foundedSchedule.RemainingSeat < item.Qty)
+                {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} is overload",
                         message: "Checkout Order Failed"
                     ).GetFormated(StatusCodes.Status400BadRequest);
                 }
 
-                var SubTotalPrice = foundedSchedule.Price * (int) item.Qty;
-                var orderItem = new OrderItemsV1{
+                var SubTotalPrice = foundedSchedule.Price * (int)item.Qty;
+                var orderItem = new OrderItemsV1
+                {
                     MovieSchedule = foundedSchedule,
                     Price = foundedSchedule.Price,
                     Qty = item.Qty,
                     SubTotalPrice = SubTotalPrice,
                 };
 
-                totalQty += (int) item.Qty;
+                totalQty += (int)item.Qty;
                 totalPriceAll += SubTotalPrice;
                 orderItems[idx++] = orderItem;
             }
 
-            var order = new OrderV1{
+            var order = new OrderV1
+            {
                 User = user,
                 OrderItems = orderItems,
                 TotalItemPrice = totalPriceAll
@@ -95,10 +103,12 @@ namespace dot_dotnet_test_api.Controllers
 
 
             return new Response<object>(
-                data: new {
+                data: new
+                {
                     total_qty = totalQty,
                     total_price = order.TotalItemPrice,
-                    item_details = order.OrderItems.Select(item => new {
+                    item_details = order.OrderItems.Select(item => new
+                    {
                         studio_number = item.MovieSchedule!.Studio!.StudioNumber,
                         qty = item.Qty,
                         sub_total_price = item.SubTotalPrice,
@@ -132,19 +142,21 @@ namespace dot_dotnet_test_api.Controllers
             {
                 var foundedSchedule = await _context.Schedule
                     .Include(x => x.Studio)
-                    .Where(x => x.Id == (long) item.MovieScheduleId)
+                    .Where(x => x.Id == (long)item.MovieScheduleId)
                     .SingleOrDefaultAsync();
-                    
-                if (foundedSchedule == null) {
+
+                if (foundedSchedule == null)
+                {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} not found",
                         message: "Checkout Order Failed"
                     ).GetFormated(StatusCodes.Status404NotFound);
                 }
-                
+
                 var startTime = DateTime.Parse($"{foundedSchedule.Date.ToString()} {foundedSchedule.StartTime}");
 
-                if (DateTime.Now >= startTime) {
+                if (DateTime.Now >= startTime)
+                {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} already passed.",
                         message: "Checkout Order Failed"
@@ -152,18 +164,20 @@ namespace dot_dotnet_test_api.Controllers
                 }
 
                 var shceduleStudioCount = await _context.OrderItems
-                    .Where(x => x.MovieSchedule.Id == (long) item.MovieScheduleId)
+                    .Where(x => x.MovieSchedule.Id == (long)item.MovieScheduleId)
                     .SumAsync(x => x.Qty);
-                
-                if (foundedSchedule.RemainingSeat < item.Qty) {
+
+                if (foundedSchedule.RemainingSeat < item.Qty)
+                {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} is overload",
                         message: "Checkout Order Failed"
                     ).GetFormated(StatusCodes.Status400BadRequest);
-                }   
+                }
 
-                var SubTotalPrice = foundedSchedule.Price * (int) item.Qty;
-                var orderItem = new OrderItemsV1{
+                var SubTotalPrice = foundedSchedule.Price * (int)item.Qty;
+                var orderItem = new OrderItemsV1
+                {
                     MovieSchedule = foundedSchedule,
                     Price = foundedSchedule.Price,
                     Qty = item.Qty,
@@ -172,16 +186,16 @@ namespace dot_dotnet_test_api.Controllers
 
                 foundedSchedule.RemainingSeat -= item.Qty;
 
-                totalQty += (int) item.Qty;
+                totalQty += (int)item.Qty;
                 totalPriceAll += SubTotalPrice;
                 orderItems[idx++] = orderItem;
 
-                Console.WriteLine(foundedSchedule.RemainingSeat);
                 _context.Schedule.Update(foundedSchedule);
                 await _context.SaveChangesAsync();
             }
 
-            var order = new OrderV1{
+            var order = new OrderV1
+            {
                 User = user,
                 OrderItems = orderItems,
                 TotalItemPrice = totalPriceAll
@@ -190,12 +204,22 @@ namespace dot_dotnet_test_api.Controllers
             _context.Add(order);
             await _context.SaveChangesAsync();
 
+            var emailMessage = new EmailMessage {
+                To = "yusriladr.37@gmail.com",
+                Subject = "Your checkout is success",
+                Body = $"Your checkout id is {order.Id}",
+            };
+
+            _queue.QueueInvocableWithPayload<EmailInvocable, EmailMessage>(emailMessage);
+
 
             return new Response<object>(
-                data: new {
+                data: new
+                {
                     total_qty = totalQty,
                     total_price = order.TotalItemPrice,
-                    item_details = order.OrderItems.Select(item => new {
+                    item_details = order.OrderItems.Select(item => new
+                    {
                         studio_number = item.MovieSchedule!.Studio!.StudioNumber,
                         qty = item.Qty,
                         sub_total_price = item.SubTotalPrice,
