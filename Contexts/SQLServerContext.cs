@@ -79,6 +79,29 @@ public class SQLServerContext : DbContext
         modelBuilder.Entity<MovieV1>().HasData(
             movie
         );
+
+        modelBuilder.Entity<StudioV1>().HasData([
+            new StudioV1 {
+                Id = 1,
+                StudioNumber = 1,
+                SeatCapacity = 50,
+            },
+            new StudioV1 {
+                Id = 2,
+                StudioNumber = 2,
+                SeatCapacity = 50,
+            },
+            new StudioV1 {
+                Id = 3,
+                StudioNumber = 3,
+                SeatCapacity = 50,
+            },
+            new StudioV1 {
+                Id = 4,
+                StudioNumber = 4,
+                SeatCapacity = 50,
+            }
+        ]);
     }
 
 
@@ -87,4 +110,6 @@ public class SQLServerContext : DbContext
     public DbSet<MovieV1> Movies { get; set; } = null!;
     public DbSet<TagV1> Tags { get; set; } = null!;
     public DbSet<MovieTagsV1> MovieTags { get; set; } = null!;
+    public DbSet<StudioV1> Studio { get; set; } = null!;
+    public DbSet<MovieScheduleV1> Schedule { get; set; } = null!;
 }

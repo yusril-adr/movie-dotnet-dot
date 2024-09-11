@@ -16,15 +16,16 @@ using dot_dotnet_test_api.Validators;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using EFCore.BulkExtensions;
+using System.Globalization;
 
 namespace dot_dotnet_test_api.Controllers
 {
     [Route("api/v1/movies")]
     [ApiController]
-    public class MoviesV1Controller(SQLServerContext context, ILogger<MoviesV1Controller> logger) : ControllerBase
+    public class MovieV1Controller(SQLServerContext context, ILogger<MovieV1Controller> logger) : ControllerBase
     {
         private readonly SQLServerContext _context = context;
-        private readonly ILogger<MoviesV1Controller> _logger = logger;
+        private readonly ILogger<MovieV1Controller> _logger = logger;
 
 
         // GET: api/v1/backoffice/movie
@@ -90,6 +91,94 @@ namespace dot_dotnet_test_api.Controllers
             ).GetFormated();
         }
     
+        [HttpPost("/api/v1/backoffice/movies/schedule")]
+        public async Task<ActionResult<IEnumerable<MovieScheduleV1>>> PostBackOfficeSchedule([FromBody] MovieV1BackOfficeScheduleDto movieV1BackOfficeScheduleDto)
+        {
+            var validator = new MovieV1BackOfficeScheduleValidator();
+            ValidationResult results = validator.Validate(movieV1BackOfficeScheduleDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Add Schedule Movie Failed");
+
+            var foundedMovie = await _context.Movies.FindAsync((long) movieV1BackOfficeScheduleDto.MovieId);
+            if (foundedMovie == null) 
+            {
+                return new Response<object>(
+                    error: "Movie Not Found",
+                    message: "Add Schedule Movie Failed"
+                ).GetFormated(statusCode: StatusCodes.Status404NotFound);
+            }
+
+            var foundedStudio = await _context.Studio.FindAsync((long) movieV1BackOfficeScheduleDto.StudioId);
+            if (foundedStudio == null) 
+            {
+                return new Response<object>(
+                    error: "Studio Not Found",
+                    message: "Add Schedule Movie Failed"
+                ).GetFormated(statusCode: StatusCodes.Status404NotFound);
+            }
+
+            var dtoDate = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date);
+            var foundedScheduler = await _context.Schedule
+                .Where(schedule => 
+                    schedule.Movie.Id == movieV1BackOfficeScheduleDto.MovieId
+                    && schedule.Studio.Id == movieV1BackOfficeScheduleDto.StudioId
+                    && schedule.Date == dtoDate
+                )
+                .ToListAsync();
+            
+            string? error = null;
+
+            foundedScheduler.ForEach(scheduler => {
+                var startTime = DateTime.Parse($"{scheduler.Date} {scheduler.StartTime}");
+                var endTime = DateTime.Parse($"{scheduler.Date} {scheduler.EndTime}");
+
+                var dtoTime = DateTime.Parse($"{DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date)} {movieV1BackOfficeScheduleDto.StartTime}");
+
+               if (dtoTime >= startTime && dtoTime <= endTime) {
+                    error = $"Schedule conflict with id {scheduler.Id}";
+               }
+
+               _logger.LogInformation($"startTime {startTime.ToString()}");
+               _logger.LogInformation($"endTime {endTime.ToString()}");
+               _logger.LogInformation($"dtoTime {dtoTime.ToString()}");
+            });
+
+            _logger.LogInformation($"error: {error}");
+            
+            if (error != null) {
+                return new Response<object>(
+                    error: error,
+                    message: "Add Schedule Movie Failed"
+                ).GetFormated(StatusCodes.Status400BadRequest);
+            }
+
+            var createdSchedule = new MovieScheduleV1 {
+                Movie = foundedMovie,
+                Studio = foundedStudio,
+                StartTime = movieV1BackOfficeScheduleDto.StartTime,
+                EndTime = movieV1BackOfficeScheduleDto.EndTime,
+                Date = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date),
+                Price = (int) movieV1BackOfficeScheduleDto.Price,
+            };
+
+            _context.Add<MovieScheduleV1>(createdSchedule);
+            await _context.SaveChangesAsync();
+
+            return new Response<object>(
+                data: new {
+                    createdSchedule.Id,
+                    createdSchedule.Movie,
+                    createdSchedule.Studio,
+                    start_time = createdSchedule.StartTime,
+                    end_time = createdSchedule.EndTime,
+                    createdSchedule.Date,
+                    createdSchedule.Price
+                },
+                message: "Add Schedule Movie Success"
+            ).GetFormated(StatusCodes.Status201Created);
+        }
+
+
         // PUT: api/v1/backoffice/movie/{movieId}
         [HttpPut("/api/v1/backoffice/movies/{movieId}")]
         public async Task<ActionResult<IEnumerable<MovieV1>>> PutBackOfficeMovie(long movieId, [FromForm] MovieV1BackOfficeUpdateDto movieV1BackOfficeUpdateDto)
