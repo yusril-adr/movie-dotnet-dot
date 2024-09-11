@@ -35,17 +35,17 @@ namespace dot_dotnet_test_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _context.Users.FindAsync(Convert.ToInt64(userId));
 
-
             var orderItems = new OrderItemsV1[transactionV1OrderDto.Items.Length];
             int totalPriceAll = 0;
             int totalQty = 0;
             int idx = 0;
             foreach (var item in transactionV1OrderDto.Items)
             {
+
                 var foundedSchedule = await _context.Schedule
                     .Include(x => x.Studio)
                     .Where(x => x.Id == (long) item.MovieScheduleId)
-                    .SingleAsync();
+                    .SingleOrDefaultAsync();                
                     
                 if (foundedSchedule == null) {
                     return new Response<object>(
@@ -67,7 +67,7 @@ namespace dot_dotnet_test_api.Controllers
                     .Where(x => x.MovieSchedule.Id == (long) item.MovieScheduleId)
                     .SumAsync(x => x.Qty);
                 
-                if ((foundedSchedule.Studio.SeatCapacity - (int) shceduleStudioCount) < item.Qty) {
+                if (foundedSchedule.RemainingSeat < item.Qty) {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} is overload",
                         message: "Checkout Order Failed"
@@ -133,7 +133,7 @@ namespace dot_dotnet_test_api.Controllers
                 var foundedSchedule = await _context.Schedule
                     .Include(x => x.Studio)
                     .Where(x => x.Id == (long) item.MovieScheduleId)
-                    .SingleAsync();
+                    .SingleOrDefaultAsync();
                     
                 if (foundedSchedule == null) {
                     return new Response<object>(
@@ -155,7 +155,7 @@ namespace dot_dotnet_test_api.Controllers
                     .Where(x => x.MovieSchedule.Id == (long) item.MovieScheduleId)
                     .SumAsync(x => x.Qty);
                 
-                if ((foundedSchedule.Studio.SeatCapacity - (int) shceduleStudioCount) < item.Qty) {
+                if (foundedSchedule.RemainingSeat < item.Qty) {
                     return new Response<object>(
                         error: $"Movie Schedule with id {item.MovieScheduleId} is overload",
                         message: "Checkout Order Failed"
@@ -170,9 +170,15 @@ namespace dot_dotnet_test_api.Controllers
                     SubTotalPrice = SubTotalPrice,
                 };
 
+                foundedSchedule.RemainingSeat -= item.Qty;
+
                 totalQty += (int) item.Qty;
                 totalPriceAll += SubTotalPrice;
                 orderItems[idx++] = orderItem;
+
+                Console.WriteLine(foundedSchedule.RemainingSeat);
+                _context.Schedule.Update(foundedSchedule);
+                await _context.SaveChangesAsync();
             }
 
             var order = new OrderV1{

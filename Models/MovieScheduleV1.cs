@@ -19,6 +19,9 @@ public class MovieScheduleV1
     [ForeignKey("studio_id")]
     public virtual StudioV1? Studio { get; set; }
 
+    [Column("remaining_Seat")]
+    public int? RemainingSeat { get; set; }
+
     [Column("start_time", TypeName = "VARCHAR(255)")]
     public string StartTime { get; set; }
 

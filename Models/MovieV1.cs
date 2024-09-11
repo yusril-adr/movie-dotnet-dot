@@ -39,4 +39,7 @@ public class MovieV1
 
     [InverseProperty("Movie")]
     public virtual ICollection<MovieTagsV1>? MovieTags { get; set; }
+
+    [InverseProperty("Movie")]
+    public virtual ICollection<MovieScheduleV1>? MovieSchedules { get; set; }
 }

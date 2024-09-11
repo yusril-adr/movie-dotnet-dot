@@ -15,6 +15,8 @@ using Humanizer;
 using dot_dotnet_test_api.Validators;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace dot_dotnet_test_api.Controllers
 {
@@ -30,6 +32,11 @@ namespace dot_dotnet_test_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieV1>>> GetBackOfficeTags(MovieV1BackOfficeListDto movieV1BackOfficeListDto)
         {
+            var validator = new MovieV1BackOfficeListValidator();
+            ValidationResult results = validator.Validate(movieV1BackOfficeListDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get Back Office Tags Failed");
+
             var baseUri = $"{Request.Scheme}://{Request.Host}";
             var page = movieV1BackOfficeListDto.Page;
             var perPage = movieV1BackOfficeListDto.PerPage;
@@ -55,6 +62,16 @@ namespace dot_dotnet_test_api.Controllers
                 })
                 .ToListAsync();
 
+            string requestWithPath = Request.GetDisplayUrl();
+            requestWithPath = requestWithPath.Substring(0, requestWithPath.IndexOf("?"));
+            var currentUri = new UriBuilder(Request.GetDisplayUrl());
+
+            var previousQuery = HttpUtility.ParseQueryString(currentUri.Query);
+            previousQuery.Set(HttpUtility.UrlEncode("page"), (page - 1).ToString());
+
+            var nextQuery = HttpUtility.ParseQueryString(currentUri.Query);
+            nextQuery.Set(HttpUtility.UrlEncode("page"), (page + 1).ToString());
+
             return new PaginationResponse<object>(
                 items: tagList,
                 message: "Get Back Office Tags Success",
@@ -64,8 +81,8 @@ namespace dot_dotnet_test_api.Controllers
                     PerPage = movieV1BackOfficeListDto.PerPage,
                     TotalItem = tagCount,
                     totalPages = totalPage,
-                    PreviousPageLink = page == 1 ? null : $"{baseUri}?page={page - 1}&per_page={perPage}",
-                    NextPageLink = page == totalPage ? null : $"{baseUri}?page={page + 1}&per_page={perPage}",
+                    PreviousPageLink = page == 1 ? null : $"{requestWithPath}?{previousQuery}",
+                    NextPageLink = (page + 1) > totalPage || totalPage == 0  ? null : $"{requestWithPath}?{nextQuery}",
                 }
             ).GetFormated();
         }    

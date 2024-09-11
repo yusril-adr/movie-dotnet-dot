@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dot_dotnet_test_api.Contexts;
 
@@ -11,9 +12,11 @@ using dot_dotnet_test_api.Contexts;
 namespace dot_dotnet_test_api.Migrations
 {
     [DbContext(typeof(SQLServerContext))]
-    partial class SQLServerContextModelSnapshot : ModelSnapshot
+    [Migration("20240911065642_AlterTableMovieAddScheduleVirtualColumn")]
+    partial class AlterTableMovieAddScheduleVirtualColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,10 +54,6 @@ namespace dot_dotnet_test_api.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int")
                         .HasColumnName("price");
-
-                    b.Property<int?>("RemainingSeat")
-                        .HasColumnType("int")
-                        .HasColumnName("remaining_Seat");
 
                     b.Property<string>("StartTime")
                         .IsRequired()
@@ -161,12 +160,12 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 9981L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1230),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8610),
                             Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
-                            PlayUntil = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1230),
+                            PlayUntil = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8610),
                             Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
                             Title = "Avengers: Age of Ultron",
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1230)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8610)
                         });
                 });
 
@@ -290,34 +289,34 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1280),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8660),
                             SeatCapacity = 50,
                             StudioNumber = 1,
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1280)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8660)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1290),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8660),
                             SeatCapacity = 50,
                             StudioNumber = 2,
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1290)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8660)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1290),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8660),
                             SeatCapacity = 50,
                             StudioNumber = 3,
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1290)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8670)
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1290),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8670),
                             SeatCapacity = 50,
                             StudioNumber = 4,
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1290)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8670)
                         });
                 });
 
@@ -355,23 +354,23 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(940),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8540),
                             Name = "Action",
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(980)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8540)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1130),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8590),
                             Name = "Comedy",
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1130)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8590)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1130),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8590),
                             Name = "Fantasy",
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 292, DateTimeKind.Local).AddTicks(1130)
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 500, DateTimeKind.Local).AddTicks(8590)
                         });
                 });
 
@@ -454,13 +453,13 @@ namespace dot_dotnet_test_api.Migrations
                         {
                             Id = 1L,
                             Avatar = "./files/images/avatar/example.png",
-                            CreatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 282, DateTimeKind.Local).AddTicks(740),
+                            CreatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 490, DateTimeKind.Local).AddTicks(3620),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@getnada.com",
                             Is_admin = false,
                             Name = "user test",
-                            Password = "yuYNLeITkjieBxXX8b04W0QvdyOWkOvIsZcJoNJSBzBlNSRU87q/bxQzO015ka71",
-                            UpdatedAt = new DateTime(2024, 9, 11, 14, 23, 32, 282, DateTimeKind.Local).AddTicks(810)
+                            Password = "dNT5t6dK9S0fgNR+absKZgfnDVIwSdAOxfgb4FXLpuGbgBfz+bnvEFOEjjwRCe81",
+                            UpdatedAt = new DateTime(2024, 9, 11, 13, 56, 41, 490, DateTimeKind.Local).AddTicks(3670)
                         });
                 });
 

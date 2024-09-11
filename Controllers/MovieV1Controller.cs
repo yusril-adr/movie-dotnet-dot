@@ -17,6 +17,8 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using EFCore.BulkExtensions;
 using System.Globalization;
+using System.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace dot_dotnet_test_api.Controllers
 {
@@ -30,57 +32,70 @@ namespace dot_dotnet_test_api.Controllers
 
          // GET: api/v1/movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieV1>>> GetMovieList(MovieV1BackOfficeListDto movieV1BackOfficeListDto)
+        public async Task<ActionResult<IEnumerable<MovieV1>>> GetMovieList(MovieV1ListDto movieV1ListDto)
         {
-            var baseUri = $"{Request.Scheme}://{Request.Host}";
-            var page = movieV1BackOfficeListDto.Page;
-            var perPage = movieV1BackOfficeListDto.PerPage;
-            var movieCount = await _context.Movies.CountAsync();
+            var page = movieV1ListDto.Page;
+            var perPage = movieV1ListDto.PerPage;
+
+            IQueryable<MovieV1> movieQuery = _context.Movies;
+
+            if (movieV1ListDto.Keyword != null) {
+                movieQuery = movieQuery.Where(movie => EF.Functions.Like(movie.Title, $"%{movieV1ListDto.Keyword}%"));
+            }
+
+            if (movieV1ListDto.Date != null) {
+                movieQuery = movieQuery.Where(movie => 
+                    movie.MovieSchedules.Where(schedule => schedule.Date == movieV1ListDto.Date).ToArray().Length > 0
+                );
+            }
+
+            var movieCount = await movieQuery.CountAsync();
             var totalPage = (int) Math.Ceiling((double) movieCount / perPage);
-            
-            if (page > totalPage) {
+
+            if (page > totalPage && totalPage != 0 && page > 1) {
                 return new Response<object>(
                     message: "Get Box Office Movies Failed",
                     error: "page is out of range"
                 ).GetFormated(StatusCodes.Status400BadRequest);
             }
 
-            var offset = (movieV1BackOfficeListDto.Page - 1) * movieV1BackOfficeListDto.PerPage;
-            var movieList = await _context.Movies
+            var offset = (page - 1) * perPage;
+            var movieList = await movieQuery
                 .Skip(offset)
-                .Take(movieV1BackOfficeListDto.PerPage)
+                .Take(perPage)
                 .Select(movie => new {
                     movie.Id,
                     movie.Title,
                     movie.Poster,
                     movie.PlayUntil,
                     movie.Overview,
-                    tags = movie!.MovieTags!.Select((tag) => new { tag!.Tag!.Id, tag.Tag.Name })
+                    tags = movie!.MovieTags!.Select((tag) => new { tag!.Tag!.Id, tag.Tag.Name }),
+                    schedule = movie.MovieSchedules!.Select((schedule) => new {
+                        schedule.Price,
+                        studio_number = schedule.Studio!.StudioNumber,
+                        start_time = schedule.StartTime,
+                        end_time = schedule.EndTime,
+                        remaining_seat = schedule.RemainingSeat,
+                    })
                 })
-                // .join(
-                //     _context.Schedule,
-                //     movie => movie.Id,
-                //     schedule => schedule.Movie.Id,
-                //     (movie, schedule) => new {
-                //         movie.Id,
-                //         movie.Title,
-                //         movie.Poster,
-                //         movie.PlayUntil,
-                //         movie.Overview,
-                //         movie.tags,
-                //         schedule = ,
-                //     }
-                // )
                 .ToListAsync();
 
+            var baseUri = $"{Request.Scheme}://{Request.Host}";
+            string requestWithPath = Request.GetDisplayUrl();
+            requestWithPath = requestWithPath.Substring(0, requestWithPath.IndexOf("?"));
+            var currentUri = new UriBuilder(Request.GetDisplayUrl());
+
+            var previousQuery = HttpUtility.ParseQueryString(currentUri.Query);
+            previousQuery.Set(HttpUtility.UrlEncode("page"), (page - 1).ToString());
+
+            var nextQuery = HttpUtility.ParseQueryString(currentUri.Query);
+            nextQuery.Set(HttpUtility.UrlEncode("page"), (page + 1).ToString());
 
 
             return new PaginationResponse<object>(
                 items: movieList.Select(movie => {
                     var splittedFileNames = movie.Poster.Split(".");
                     var fileExtension = splittedFileNames[^1];
-
-                    var baseUri = $"{Request.Scheme}://{Request.Host}";
                     var deployedFilePath = $"{baseUri}/images/poster/{movie.Poster.Split("/")[^1]}";
                     return new {
                         movie.Id,
@@ -88,18 +103,19 @@ namespace dot_dotnet_test_api.Controllers
                         poster = movie.Poster.StartsWith("./") ? deployedFilePath : movie.Poster,
                         movie.PlayUntil,
                         movie.Overview,
-                        movie.tags
+                        movie.tags,
+                        movie.schedule,
                     };
                 }),
                 message: "Get Back Office Movies Success",
                 pagination: new Pagination
                 {
-                    Page = movieV1BackOfficeListDto.Page,
-                    PerPage = movieV1BackOfficeListDto.PerPage,
+                    Page = page,
+                    PerPage = perPage,
                     TotalItem = movieCount,
                     totalPages = totalPage,
-                    PreviousPageLink = page == 1 ? null : $"{baseUri}?page={page - 1}&per_page={perPage}",
-                    NextPageLink = page == totalPage  ? null : $"{baseUri}?page={page + 1}&per_page={perPage}",
+                    PreviousPageLink = page == 1 ? null : $"{requestWithPath}?{previousQuery}",
+                    NextPageLink = (page + 1) > totalPage || totalPage == 0  ? null : $"{requestWithPath}?{nextQuery}",
                 }
             ).GetFormated();
         }
@@ -108,6 +124,11 @@ namespace dot_dotnet_test_api.Controllers
         [HttpGet("/api/v1/backoffice/movies")]
         public async Task<ActionResult<IEnumerable<MovieV1>>> GetBackOfficeMovie(MovieV1BackOfficeListDto movieV1BackOfficeListDto)
         {
+            var validator = new MovieV1BackOfficeListValidator();
+            ValidationResult results = validator.Validate(movieV1BackOfficeListDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get Back Office Movies Failed");
+
             var baseUri = $"{Request.Scheme}://{Request.Host}";
             var page = movieV1BackOfficeListDto.Page;
             var perPage = movieV1BackOfficeListDto.PerPage;
@@ -137,13 +158,21 @@ namespace dot_dotnet_test_api.Controllers
                 .ToListAsync();
 
 
+            string requestWithPath = Request.GetDisplayUrl();
+            requestWithPath = requestWithPath.Substring(0, requestWithPath.IndexOf("?"));
+            var currentUri = new UriBuilder(Request.GetDisplayUrl());
+
+            var previousQuery = HttpUtility.ParseQueryString(currentUri.Query);
+            previousQuery.Set(HttpUtility.UrlEncode("page"), (page - 1).ToString());
+
+            var nextQuery = HttpUtility.ParseQueryString(currentUri.Query);
+            nextQuery.Set(HttpUtility.UrlEncode("page"), (page + 1).ToString());
 
             return new PaginationResponse<object>(
                 items: movieList.Select(movie => {
                     var splittedFileNames = movie.Poster.Split(".");
                     var fileExtension = splittedFileNames[^1];
 
-                    var baseUri = $"{Request.Scheme}://{Request.Host}";
                     var deployedFilePath = $"{baseUri}/images/poster/{movie.Poster.Split("/")[^1]}";
                     return new {
                         movie.Id,
@@ -161,8 +190,8 @@ namespace dot_dotnet_test_api.Controllers
                     PerPage = movieV1BackOfficeListDto.PerPage,
                     TotalItem = movieCount,
                     totalPages = totalPage,
-                    PreviousPageLink = page == 1 ? null : $"{baseUri}?page={page - 1}&per_page={perPage}",
-                    NextPageLink = page == totalPage  ? null : $"{baseUri}?page={page + 1}&per_page={perPage}",
+                    PreviousPageLink = page == 1 ? null : $"{requestWithPath}?{previousQuery}",
+                    NextPageLink = (page + 1) > totalPage || totalPage == 0  ? null : $"{requestWithPath}?{nextQuery}",
                 }
             ).GetFormated();
         }
@@ -200,8 +229,7 @@ namespace dot_dotnet_test_api.Controllers
                     schedule.Movie.Id == movieV1BackOfficeScheduleDto.MovieId
                     && schedule.Studio.Id == movieV1BackOfficeScheduleDto.StudioId
                     && schedule.Date == dtoDate
-                )
-                .ToListAsync();
+                ).ToListAsync();
             
             string? error = null;
 
@@ -230,6 +258,7 @@ namespace dot_dotnet_test_api.Controllers
                 EndTime = movieV1BackOfficeScheduleDto.EndTime,
                 Date = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date),
                 Price = (int) movieV1BackOfficeScheduleDto.Price,
+                RemainingSeat = foundedStudio.SeatCapacity,
             };
 
             _context.Add<MovieScheduleV1>(createdSchedule);
@@ -238,8 +267,15 @@ namespace dot_dotnet_test_api.Controllers
             return new Response<object>(
                 data: new {
                     createdSchedule.Id,
-                    createdSchedule.Movie,
-                    createdSchedule.Studio,
+                    movie = new {
+                        createdSchedule.Movie.Id,
+                        createdSchedule.Movie.Title,
+                    },
+                    studio = new {
+                        createdSchedule.Studio.Id,
+                        studio_number = createdSchedule.Studio.StudioNumber,
+                        seat_capacity = createdSchedule.Studio.SeatCapacity,
+                    },
                     start_time = createdSchedule.StartTime,
                     end_time = createdSchedule.EndTime,
                     createdSchedule.Date,
@@ -248,7 +284,6 @@ namespace dot_dotnet_test_api.Controllers
                 message: "Add Schedule Movie Success"
             ).GetFormated(StatusCodes.Status201Created);
         }
-
 
         // PUT: api/v1/backoffice/movies/{movieId}
         [HttpPut("/api/v1/backoffice/movies/{movieId}")]
