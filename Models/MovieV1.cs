@@ -39,7 +39,4 @@ public class MovieV1
 
     [InverseProperty("Movie")]
     public virtual ICollection<MovieTagsV1>? MovieTags { get; set; }
-
-// list<MovieTagsV1>
-    // public virtual List<MovieTagsV1> MovieTags { get; set; } = [];
 }

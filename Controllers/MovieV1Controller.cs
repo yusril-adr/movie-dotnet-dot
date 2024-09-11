@@ -28,7 +28,83 @@ namespace dot_dotnet_test_api.Controllers
         private readonly ILogger<MovieV1Controller> _logger = logger;
 
 
-        // GET: api/v1/backoffice/movie
+         // GET: api/v1/movies
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MovieV1>>> GetMovieList(MovieV1BackOfficeListDto movieV1BackOfficeListDto)
+        {
+            var baseUri = $"{Request.Scheme}://{Request.Host}";
+            var page = movieV1BackOfficeListDto.Page;
+            var perPage = movieV1BackOfficeListDto.PerPage;
+            var movieCount = await _context.Movies.CountAsync();
+            var totalPage = (int) Math.Ceiling((double) movieCount / perPage);
+            
+            if (page > totalPage) {
+                return new Response<object>(
+                    message: "Get Box Office Movies Failed",
+                    error: "page is out of range"
+                ).GetFormated(StatusCodes.Status400BadRequest);
+            }
+
+            var offset = (movieV1BackOfficeListDto.Page - 1) * movieV1BackOfficeListDto.PerPage;
+            var movieList = await _context.Movies
+                .Skip(offset)
+                .Take(movieV1BackOfficeListDto.PerPage)
+                .Select(movie => new {
+                    movie.Id,
+                    movie.Title,
+                    movie.Poster,
+                    movie.PlayUntil,
+                    movie.Overview,
+                    tags = movie!.MovieTags!.Select((tag) => new { tag!.Tag!.Id, tag.Tag.Name })
+                })
+                // .join(
+                //     _context.Schedule,
+                //     movie => movie.Id,
+                //     schedule => schedule.Movie.Id,
+                //     (movie, schedule) => new {
+                //         movie.Id,
+                //         movie.Title,
+                //         movie.Poster,
+                //         movie.PlayUntil,
+                //         movie.Overview,
+                //         movie.tags,
+                //         schedule = ,
+                //     }
+                // )
+                .ToListAsync();
+
+
+
+            return new PaginationResponse<object>(
+                items: movieList.Select(movie => {
+                    var splittedFileNames = movie.Poster.Split(".");
+                    var fileExtension = splittedFileNames[^1];
+
+                    var baseUri = $"{Request.Scheme}://{Request.Host}";
+                    var deployedFilePath = $"{baseUri}/images/poster/{movie.Poster.Split("/")[^1]}";
+                    return new {
+                        movie.Id,
+                        movie.Title,
+                        poster = movie.Poster.StartsWith("./") ? deployedFilePath : movie.Poster,
+                        movie.PlayUntil,
+                        movie.Overview,
+                        movie.tags
+                    };
+                }),
+                message: "Get Back Office Movies Success",
+                pagination: new Pagination
+                {
+                    Page = movieV1BackOfficeListDto.Page,
+                    PerPage = movieV1BackOfficeListDto.PerPage,
+                    TotalItem = movieCount,
+                    totalPages = totalPage,
+                    PreviousPageLink = page == 1 ? null : $"{baseUri}?page={page - 1}&per_page={perPage}",
+                    NextPageLink = page == totalPage  ? null : $"{baseUri}?page={page + 1}&per_page={perPage}",
+                }
+            ).GetFormated();
+        }
+
+        // GET: api/v1/backoffice/movies
         [HttpGet("/api/v1/backoffice/movies")]
         public async Task<ActionResult<IEnumerable<MovieV1>>> GetBackOfficeMovie(MovieV1BackOfficeListDto movieV1BackOfficeListDto)
         {
@@ -91,6 +167,7 @@ namespace dot_dotnet_test_api.Controllers
             ).GetFormated();
         }
     
+        // POST: api/v1/backoffice/movies/schedule
         [HttpPost("/api/v1/backoffice/movies/schedule")]
         public async Task<ActionResult<IEnumerable<MovieScheduleV1>>> PostBackOfficeSchedule([FromBody] MovieV1BackOfficeScheduleDto movieV1BackOfficeScheduleDto)
         {
@@ -137,14 +214,8 @@ namespace dot_dotnet_test_api.Controllers
                if (dtoTime >= startTime && dtoTime <= endTime) {
                     error = $"Schedule conflict with id {scheduler.Id}";
                }
-
-               _logger.LogInformation($"startTime {startTime.ToString()}");
-               _logger.LogInformation($"endTime {endTime.ToString()}");
-               _logger.LogInformation($"dtoTime {dtoTime.ToString()}");
             });
 
-            _logger.LogInformation($"error: {error}");
-            
             if (error != null) {
                 return new Response<object>(
                     error: error,
@@ -179,7 +250,7 @@ namespace dot_dotnet_test_api.Controllers
         }
 
 
-        // PUT: api/v1/backoffice/movie/{movieId}
+        // PUT: api/v1/backoffice/movies/{movieId}
         [HttpPut("/api/v1/backoffice/movies/{movieId}")]
         public async Task<ActionResult<IEnumerable<MovieV1>>> PutBackOfficeMovie(long movieId, [FromForm] MovieV1BackOfficeUpdateDto movieV1BackOfficeUpdateDto)
         {
