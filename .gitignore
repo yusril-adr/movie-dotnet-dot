@@ -391,3 +391,5 @@ FodyWeavers.xsd
 
 files/images/avatar/*-user.png
 files/images/poster/*-movie.png
+
+appsettings.Development.json
