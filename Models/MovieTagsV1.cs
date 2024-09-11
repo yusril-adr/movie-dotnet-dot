@@ -11,15 +11,14 @@ public class MovieTagsV1
     [Column("id", TypeName = "bigint")]
     [Key]
     [Required]
-    public long Id { get;set; }
+    public long? Id { get;set; }
 
-    [Column("movie_id", TypeName = "bigint")]
-    [Required]
-    public long MovieId { get; set; }
+    [ForeignKey("movie_id")]
+    public virtual MovieV1? Movie { get; set; }
 
-    [Column("tag_id", TypeName = "bigint")]
-    [Required]
-    public long TagId { get; set; }
+    [ForeignKey("tag_id")]
+    public virtual TagV1? Tag { get; set; }
+
 
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; } = DateTime.Now;
@@ -27,8 +26,4 @@ public class MovieTagsV1
     public DateTime? UpdatedAt { get; set; } = DateTime.Now;
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; } = null;
-
-    public MovieV1 Movie { get; set; } = null!;
-    public TagV1 Tag { get; set; } = null!;
-
 }

@@ -390,3 +390,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 files/images/avatar/*-user.png
+files/images/poster/*-movie.png

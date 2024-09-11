@@ -12,7 +12,7 @@ public class MovieV1
     [Key]
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public long Id { get;set; }
+    public long? Id { get;set; }
 
     [Column("title", TypeName = "varchar(255)")]
     [Required]
@@ -37,8 +37,9 @@ public class MovieV1
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; } = null;
 
-    [Column("tags")]
+    [InverseProperty("Movie")]
+    public virtual ICollection<MovieTagsV1>? MovieTags { get; set; }
 
-    public List<MovieTagsV1> Tags { get; } = [];
-
+// list<MovieTagsV1>
+    // public virtual List<MovieTagsV1> MovieTags { get; set; } = [];
 }

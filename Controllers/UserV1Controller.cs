@@ -72,7 +72,7 @@ namespace dot_dotnet_test_api.Controllers
                 _context.Users.Add(createdUser);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException error)
+            catch (DbUpdateException)
             {
                 var responseSQLException = new Response<object>(
                     error: "Email already Used",

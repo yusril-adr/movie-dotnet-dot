@@ -12,7 +12,7 @@ using dot_dotnet_test_api.Contexts;
 namespace dot_dotnet_test_api.Migrations
 {
     [DbContext(typeof(SQLServerContext))]
-    [Migration("20240910071741_CreateTableMovieAndTag")]
+    [Migration("20240911010607_CreateTableMovieAndTag")]
     partial class CreateTableMovieAndTag
     {
         /// <inheritdoc />
@@ -27,12 +27,12 @@ namespace dot_dotnet_test_api.Migrations
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.MovieTagsV1", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long?>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -42,33 +42,28 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_at");
 
-                    b.Property<long>("MovieId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("movie_id");
-
-                    b.Property<long>("TagId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("tag_id");
-
-                    b.Property<long>("TagId1")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
+                    b.Property<long?>("movie_id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("tag_id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("movie_id");
 
-                    b.HasIndex("TagId1");
+                    b.HasIndex("tag_id");
 
                     b.ToTable("Movie_Tags");
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.MovieV1", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long?>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
@@ -111,23 +106,23 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 9981L,
-                            CreatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 586, DateTimeKind.Local).AddTicks(8950),
+                            CreatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1150),
                             Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
-                            PlayUntil = new DateTime(2024, 9, 10, 14, 17, 40, 586, DateTimeKind.Local).AddTicks(8940),
+                            PlayUntil = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1150),
                             Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
                             Title = "Avengers: Age of Ultron",
-                            UpdatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 586, DateTimeKind.Local).AddTicks(8950)
+                            UpdatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1150)
                         });
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.TagV1", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long?>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -149,6 +144,29 @@ namespace dot_dotnet_test_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1090),
+                            Name = "Action",
+                            UpdatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1090)
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1130),
+                            Name = "Comedy",
+                            UpdatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1130)
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            CreatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1140),
+                            Name = "Fantasy",
+                            UpdatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 228, DateTimeKind.Local).AddTicks(1140)
+                        });
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.TodoItemV1", b =>
@@ -230,29 +248,25 @@ namespace dot_dotnet_test_api.Migrations
                         {
                             Id = 1L,
                             Avatar = "./files/images/avatar/example.png",
-                            CreatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 576, DateTimeKind.Local).AddTicks(2430),
+                            CreatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 217, DateTimeKind.Local).AddTicks(7940),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@getnada.com",
                             Is_admin = false,
                             Name = "user test",
-                            Password = "Auje5q9ZIDcuN92i5aWt4f55XbEhCBQ5wKIrh6fS7IrSy1L0aUulEEUl4TWRSttn",
-                            UpdatedAt = new DateTime(2024, 9, 10, 14, 17, 40, 576, DateTimeKind.Local).AddTicks(2470)
+                            Password = "9+2y7gb8BRn91FPWXJ5iculKdqFPOxBP0AKUsfSiogFMyqr+CwKkO6TcVRbStFJY",
+                            UpdatedAt = new DateTime(2024, 9, 11, 8, 6, 7, 217, DateTimeKind.Local).AddTicks(7980)
                         });
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.MovieTagsV1", b =>
                 {
                     b.HasOne("dot_dotnet_test_api.Models.MovieV1", "Movie")
-                        .WithMany("Tags")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MovieTags")
+                        .HasForeignKey("movie_id");
 
                     b.HasOne("dot_dotnet_test_api.Models.TagV1", "Tag")
-                        .WithMany("MovieTags")
-                        .HasForeignKey("TagId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MovieTag")
+                        .HasForeignKey("tag_id");
 
                     b.Navigation("Movie");
 
@@ -261,12 +275,12 @@ namespace dot_dotnet_test_api.Migrations
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.MovieV1", b =>
                 {
-                    b.Navigation("Tags");
+                    b.Navigation("MovieTags");
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.TagV1", b =>
                 {
-                    b.Navigation("MovieTags");
+                    b.Navigation("MovieTag");
                 });
 #pragma warning restore 612, 618
         }

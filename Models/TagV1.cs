@@ -11,7 +11,7 @@ public class TagV1
     [Column("id", TypeName = "bigint")]
     [Key]
     [Required]
-    public int Id { get;set; }
+    public long? Id { get;set; }
 
     [Column("name", TypeName = "varchar(255)")]
     [Required]
@@ -24,7 +24,6 @@ public class TagV1
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; } = null;
 
-
-    public List<MovieTagsV1> MovieTags { get; } = [];
-
+    [InverseProperty("Tag")]
+    public virtual ICollection<MovieTagsV1> MovieTag { get; } = [];
 }
