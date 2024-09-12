@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Users")]
+[Table("users")]
 [Index(nameof(Email), IsUnique = true)]
-public class UserV1
+public class User
 {
     [Column("id", TypeName = "bigint")]
     [Key]

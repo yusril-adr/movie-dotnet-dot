@@ -13,6 +13,9 @@ using Quartz.Impl;
 using Quartz.AspNetCore;
 using dot_dotnet_test_api.Interfaces;
 using Coravel;
+using dot_dotnet_test_api.Repositories;
+using dot_dotnet_test_api.Services;
+using dot_dotnet_test_api.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,12 +71,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             },
             OnAuthenticationFailed = (context) =>
             {
+                // TODO: Trying to implement custom 401 without jwt
                 // var unAuthorizedresponse = new Response<object>(
                 //     data: null,
                 //     errors: ["Unauthorized"],
                 //     message: "Unauthorized"
                 // );
-
                 // context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 // await context.Response.WriteAsJsonAsync(
                 //     unAuthorizedresponse
@@ -92,7 +95,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
             ClockSkew = TimeSpan.Zero
         };
     });
@@ -102,12 +105,15 @@ builder.Services.AddDbContext<SQLServerContext>(opt =>
     opt.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
+builder.Services.AddTransient<EmailInvocable>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AddNowPlayingMovieJob>();
 
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
+
 builder.Services.AddQuartz(q =>
 {
-    // Just use the name of your job that you created in the Jobs folder.
     var jobKey = new JobKey("AddNowPlayingMovieJob");
     q.AddJob<AddNowPlayingMovieJob>(opts => opts
         .WithIdentity(jobKey)
@@ -116,6 +122,7 @@ builder.Services.AddQuartz(q =>
     
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
+        // TODO alternative rule
         // .WithCronSchedule("0 0 0 * * ?") // At 00.00 AM
         .StartNow()
         .WithSimpleSchedule(x => x
@@ -127,7 +134,6 @@ builder.Services.AddQuartz(q =>
 builder.Services.AddQuartzServer(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddQueue();
-builder.Services.AddTransient<EmailInvocable>();
 
 var app = builder.Build();
 
@@ -154,14 +160,6 @@ app.UseDirectoryBrowser(new DirectoryBrowserOptions
     FileProvider = fileProvider,
     RequestPath = requestPath
 });
-
-// app.UseStaticFiles(new StaticFileOptions
-// {
-//     FileProvider = new PhysicalFileProvider(
-//         Path.Combine(builder.Environment.ContentRootPath, "files/images/avatar")),
-//     RequestPath = "/images/avatar"
-// });
-
 
 app.UseHttpsRedirection();
 

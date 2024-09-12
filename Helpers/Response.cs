@@ -17,7 +17,7 @@ public class LowercaseContractResolver : DefaultContractResolver
   }
 }
 
-public class Response<T> : IResponse<T>
+public class Response<T> : IResponse<T?>
 {
   public bool Success { get; set; } = true;
   public string? Error { get; set; } = null;

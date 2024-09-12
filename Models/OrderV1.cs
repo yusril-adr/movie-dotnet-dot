@@ -14,7 +14,7 @@ public class OrderV1
     public long? Id { get;set; }
 
     [ForeignKey("user_id")]
-    public virtual UserV1? User { get; set; }
+    public virtual User? User { get; set; }
 
     [Column("total_item_price")]
     public int? TotalItemPrice { get; set; }

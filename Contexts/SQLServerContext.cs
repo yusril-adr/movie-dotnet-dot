@@ -15,8 +15,8 @@ public class SQLServerContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //Seeding User Master Data using HasData method
-        modelBuilder.Entity<UserV1>().HasData(
-           new UserV1
+        modelBuilder.Entity<User>().HasData(
+           new User
            {
                Id = 1,
                Name = "user test",
@@ -106,7 +106,7 @@ public class SQLServerContext : DbContext
 
 
     public DbSet<TodoItemV1> TodoItems { get; set; } = null!;
-    public DbSet<UserV1> Users { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
     public DbSet<MovieV1> Movies { get; set; } = null!;
     public DbSet<TagV1> Tags { get; set; } = null!;
     public DbSet<MovieTagsV1> MovieTags { get; set; } = null!;
