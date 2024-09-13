@@ -17,7 +17,7 @@ public class MovieScheduleV1
     public virtual MovieV1? Movie { get; set; }
 
     [ForeignKey("studio_id")]
-    public virtual StudioV1? Studio { get; set; }
+    public virtual Studio? Studio { get; set; }
 
     [Column("remaining_Seat")]
     public int? RemainingSeat { get; set; }

@@ -12,14 +12,14 @@ public class UserRepository(IConfiguration configuration, SQLServerContext conte
   private readonly ILogger<UserRepository> _logger = logger;
 
   public async Task<User> Create(User user) {
-    _context.Users.Add(user);
+    _context.User.Add(user);
     await _context.SaveChangesAsync();
 
     return user;
   }
 
   public async Task<User?> FindByEmail(string email) {
-    var foundedUser = await _context.Users
+    var foundedUser = await _context.User
       .Where(user => user.Email == email)
       .Select(user => user)
       .FirstOrDefaultAsync();
@@ -27,7 +27,7 @@ public class UserRepository(IConfiguration configuration, SQLServerContext conte
   }
 
   public async Task<User?> FindById(long userId) {
-    var foundedUser = await _context.Users.FindAsync(userId);
+    var foundedUser = await _context.User.FindAsync(userId);
     return foundedUser;
   }
 }

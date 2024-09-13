@@ -10,15 +10,36 @@ using FluentValidation.Results;
 using EFCore.BulkExtensions;
 using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
+using dot_dotnet_test_api.API.Version1.Services;
+using dot_dotnet_test_api.API.Version1.Dtos;
 
-namespace dot_dotnet_test_api.Controllers
+namespace dot_dotnet_test_api.API.Version1.Controllers
 {
     [Route("api/v1/backoffice")]
     [ApiController]
-    public class BackOfficeV1Controller(SQLServerContext context, ILogger<BackOfficeV1Controller> logger) : ControllerBase
+    public class BackOfficeController(
+        SQLServerContext context,
+        StudioService studioService,
+        TagService tagService,
+        ILogger<BackOfficeController> logger
+    ) : ControllerBase
     {
         private readonly SQLServerContext _context = context;
-        private readonly ILogger<BackOfficeV1Controller> _logger = logger;
+        private readonly ILogger<BackOfficeController> _logger = logger;
+        private readonly StudioService _studioService = studioService;
+        private readonly TagService _tagService = tagService;
+
+        // GET: api/v1/backoffice/studios
+        [HttpGet("studios")]
+        public async Task<ContentResult> GetBackOfficeStudios(PaginationDto paginationDto)
+        {
+            var validator = new PaginationValidator();
+            ValidationResult results = validator.Validate(paginationDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get BackOffice Studios Failed");
+
+            return await _studioService.GetStudios(paginationDto);
+        }    
 
         // GET: api/v1/backoffice/movies
         [HttpGet("movies")]
@@ -93,7 +114,19 @@ namespace dot_dotnet_test_api.Controllers
                 }
             ).GetFormated();
         }
-    
+        
+        // GET: api/v1/backoffice/tags
+        [HttpGet("tags")]
+        public async Task<ContentResult> GetBackOfficeTags(PaginationDto paginationDto)
+        {
+            var validator = new PaginationValidator();
+            ValidationResult results = validator.Validate(paginationDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get Back Office Tags Failed");
+
+            return await _tagService.GetTags(paginationDto);
+        }    
+
         // POST: api/v1/backoffice/movies/schedule
         [HttpPost("movies/schedule")]
         public async Task<ActionResult<IEnumerable<MovieScheduleV1>>> PostBackOfficeSchedule([FromBody] MovieV1BackOfficeScheduleDto movieV1BackOfficeScheduleDto)
@@ -203,19 +236,19 @@ namespace dot_dotnet_test_api.Controllers
             }
 
 
-            var movieTags = new MovieTagsV1[movieV1BackOfficeUpdateDto.Tags!.Length];
+            var movieTags = new MovieTags[movieV1BackOfficeUpdateDto.Tags!.Length];
 
             int i = 0;
             string[] errors = [];
             foreach (var tag in movieV1BackOfficeUpdateDto.Tags)
             {
-                var foundedTag = await _context.Tags.FindAsync(tag);
+                var foundedTag = await _context.Tag.FindAsync(tag);
 
                 if (foundedTag == null) {
                     errors.Append($"Tag with id {tag} Not Found");
                 }
 
-                var movieTag = new MovieTagsV1 {
+                var movieTag = new MovieTags {
                     Tag = foundedTag,
                     Movie = foundedMovie,
                 };

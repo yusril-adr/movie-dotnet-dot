@@ -26,40 +26,20 @@ public class SQLServerContext : DbContext
            }
        );
 
-        // modelBuilder.Entity<MovieV1>()
-        // .HasMany(e => e.Tags)
-        // .WithMany(e => e.Movies)
-        // .UsingEntity(
-        //     "Movies_Tag",
-        //     l => l.HasOne(typeof(TagV1)).WithMany().HasForeignKey("TagId").HasPrincipalKey(nameof(TagV1.Id)),
-        //     r => r.HasOne(typeof(MovieV1)).WithMany().HasForeignKey("MovieId").HasPrincipalKey(nameof(MovieV1.Id)),
-        //     j => j.HasKey("MovieId", "TagId")
-        // );
-
-        // modelBuilder.Entity<MovieV1>()
-        // .HasMany(e => e.Tags)
-        // .WithMany(e => e.Movies)
-        // .UsingEntity(
-        //     "Movies_Tags"
-            // l => l.HasOne<TagV1>().WithMany().HasForeignKey(e => e.TagId),
-            // r => r.HasOne<MovieV1>().WithMany().HasForeignKey(e => e.MovieId)
-            // j => j.HasKey("movie_id", "tag_id")
-        // );
-
-        var tag = new TagV1
+        var tag = new Tag
         {
             Id = 1,
             Name = "Action",
         };
 
-        modelBuilder.Entity<TagV1>().HasData([
+        modelBuilder.Entity<Tag>().HasData([
             tag,
-            new TagV1
+            new Tag
             {
                 Id = 2,
                 Name = "Comedy",
             },
-            new TagV1
+            new Tag
             {
                 Id = 3,
                 Name = "Fantasy",
@@ -80,23 +60,23 @@ public class SQLServerContext : DbContext
             movie
         );
 
-        modelBuilder.Entity<StudioV1>().HasData([
-            new StudioV1 {
+        modelBuilder.Entity<Studio>().HasData([
+            new Studio {
                 Id = 1,
                 StudioNumber = 1,
                 SeatCapacity = 50,
             },
-            new StudioV1 {
+            new Studio {
                 Id = 2,
                 StudioNumber = 2,
                 SeatCapacity = 50,
             },
-            new StudioV1 {
+            new Studio {
                 Id = 3,
                 StudioNumber = 3,
                 SeatCapacity = 50,
             },
-            new StudioV1 {
+            new Studio {
                 Id = 4,
                 StudioNumber = 4,
                 SeatCapacity = 50,
@@ -105,11 +85,11 @@ public class SQLServerContext : DbContext
     }
 
 
-    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<User> User { get; set; } = null!;
     public DbSet<MovieV1> Movies { get; set; } = null!;
-    public DbSet<TagV1> Tags { get; set; } = null!;
-    public DbSet<MovieTagsV1> MovieTags { get; set; } = null!;
-    public DbSet<StudioV1> Studio { get; set; } = null!;
+    public DbSet<Tag> Tag { get; set; } = null!;
+    public DbSet<MovieTags> MovieTags { get; set; } = null!;
+    public DbSet<Studio> Studio { get; set; } = null!;
     public DbSet<MovieScheduleV1> MovieSchedule { get; set; } = null!;
     public DbSet<Order> Order { get; set; } = null!;
     public DbSet<OrderItems> OrderItems { get; set; } = null!;

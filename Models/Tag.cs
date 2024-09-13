@@ -5,24 +5,17 @@ using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Studios")]
-public class StudioV1
+[Table("tags")]
+public class Tag
 {
     [Column("id", TypeName = "bigint")]
     [Key]
     [Required]
-    [JsonProperty("id")]
     public long? Id { get;set; }
 
-    [Column("studio_number")]
+    [Column("name", TypeName = "varchar(255)")]
     [Required]
-    [JsonProperty("studio_number")]
-    public int StudioNumber { get; set; }
-
-    [Column("seat_capacity")]
-    [Required]
-    [JsonProperty("seat_capacity")]
-    public int SeatCapacity { get; set; }
+    public string? Name { get; set; }
 
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; } = DateTime.Now;
@@ -30,4 +23,7 @@ public class StudioV1
     public DateTime? UpdatedAt { get; set; } = DateTime.Now;
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; } = null;
+
+    [InverseProperty("Tag")]
+    public virtual ICollection<MovieTags> MovieTag { get; } = [];
 }

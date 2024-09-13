@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using dot_dotnet_test_api.API.Version1.Services;
 
-namespace dot_dotnet_test_api.Controllers
+namespace dot_dotnet_test_api.API.Version1.Controllers
 {
     [Route("api/v1/order")]
     [ApiController]

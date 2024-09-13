@@ -8,14 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dot_dotnet_test_api.API.Version1.Services;
 
-public class OrderService(
+public class OrderService (
   IConfiguration configuration,
   UserRepository userRepository,
   OrderRepository orderRepository,
   MovieScheduleRepository movieScheduleRepository,
   TokenService tokenService,
   IQueue queue,
-  ILogger<UserService> logger
+  ILogger<OrderService> logger
 )
 {
   private readonly IConfiguration _configuration = configuration;
@@ -25,7 +25,7 @@ public class OrderService(
   private readonly MovieScheduleRepository _movieScheduleRepository = movieScheduleRepository;
   private readonly IQueue _queue = queue;
 
-  private readonly ILogger<UserService> _logger = logger;
+  private readonly ILogger<OrderService> _logger = logger;
 
   public async Task<ContentResult> PreviewOrder(OrderCreateOrViewDto orderCreateOrViewDto, long userId)
   {

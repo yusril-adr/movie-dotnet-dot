@@ -20,7 +20,7 @@ using System.Globalization;
 using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
 
-namespace dot_dotnet_test_api.Controllers
+namespace dot_dotnet_test_api.API.Version1.Controllers
 {
     [Route("api/v1/movies")]
     [ApiController]

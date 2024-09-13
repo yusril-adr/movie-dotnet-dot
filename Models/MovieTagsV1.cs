@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Movie_Tags")]
-public class MovieTagsV1
+[Table("movie_tags")]
+public class MovieTags
 {
     [Column("id", TypeName = "bigint")]
     [Key]
@@ -17,7 +17,7 @@ public class MovieTagsV1
     public virtual MovieV1? Movie { get; set; }
 
     [ForeignKey("tag_id")]
-    public virtual TagV1? Tag { get; set; }
+    public virtual Tag? Tag { get; set; }
 
 
     [Column("created_at")]

@@ -103,6 +103,7 @@ builder.Services.AddDbContext<SQLServerContext>(opt =>
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 builder.Services.AddTransient<EmailInvocable>();
+
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AddNowPlayingMovieJob>();
 
@@ -110,6 +111,12 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 
 builder.Services.AddScoped<MovieScheduleRepository>();
+
+builder.Services.AddScoped<TagRepository>();
+builder.Services.AddScoped<TagService>();
+
+builder.Services.AddScoped<StudioRepository>();
+builder.Services.AddScoped<StudioService>();
 
 builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<OrderService>();

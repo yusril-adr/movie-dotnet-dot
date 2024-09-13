@@ -38,7 +38,7 @@ public class MovieV1
     public DateTime? DeletedAt { get; set; } = null;
 
     [InverseProperty("Movie")]
-    public virtual ICollection<MovieTagsV1>? MovieTags { get; set; }
+    public virtual ICollection<MovieTags>? MovieTags { get; set; }
 
     [InverseProperty("Movie")]
     public virtual ICollection<MovieScheduleV1>? MovieSchedules { get; set; }
