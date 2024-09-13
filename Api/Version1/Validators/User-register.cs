@@ -1,10 +1,10 @@
-using dot_dotnet_test_api.Dtos;
+using dot_dotnet_test_api.API.Version1.Dtos;
 using FluentValidation;
 
-namespace dot_dotnet_test_api.Validators;
-public class UserV1RegisterDtoValidator : AbstractValidator<UserV1RegisterDto>
+namespace dot_dotnet_test_api.API.Version1.Validators;
+public class UserRegisterDtoValidator : AbstractValidator<UserRegisterDto>
 {
-    public UserV1RegisterDtoValidator()
+    public UserRegisterDtoValidator()
     {
         // Rule: Name should not be empty and must have at least 3 characters
         RuleFor(x => x.Name)

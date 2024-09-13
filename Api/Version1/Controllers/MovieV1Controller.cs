@@ -12,7 +12,7 @@ using dot_dotnet_test_api.Dtos;
 using dot_dotnet_test_api.Helpers;
 using dot_dotnet_test_api.Types;
 using Humanizer;
-using dot_dotnet_test_api.Validators;
+using dot_dotnet_test_api.API.Version1.Validators;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using EFCore.BulkExtensions;

@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace dot_dotnet_test_api.Dtos;
+namespace dot_dotnet_test_api.API.Version1.Dtos;
 
-public class TransactionV1OrderItemDto {
+public class OrderItemDto {
     [JsonProperty("movie_schedule_id")]
     public int? MovieScheduleId { get; set; }
 
@@ -11,8 +11,8 @@ public class TransactionV1OrderItemDto {
     public int? Qty { get; set; }
 }
 
-public class TransactionV1OrderDto
+public class OrderCreateOrViewDto
 {
     [JsonProperty("items")]
-    public TransactionV1OrderItemDto[]? Items { get; set; }
+    public OrderItemDto[]? Items { get; set; }
 }

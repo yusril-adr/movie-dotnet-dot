@@ -9,13 +9,10 @@ using dot_dotnet_test_api.Helpers;
 using dot_dotnet_test_api.Middlewares;
 using dot_dotnet_test_api.Jobs;
 using Quartz;
-using Quartz.Impl;
 using Quartz.AspNetCore;
-using dot_dotnet_test_api.Interfaces;
 using Coravel;
 using dot_dotnet_test_api.Repositories;
-using dot_dotnet_test_api.Services;
-using dot_dotnet_test_api.Services.UserService;
+using dot_dotnet_test_api.API.Version1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +108,11 @@ builder.Services.AddScoped<AddNowPlayingMovieJob>();
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
+
+builder.Services.AddScoped<MovieScheduleRepository>();
+
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderService>();
 
 builder.Services.AddQuartz(q =>
 {

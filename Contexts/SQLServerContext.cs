@@ -110,7 +110,7 @@ public class SQLServerContext : DbContext
     public DbSet<TagV1> Tags { get; set; } = null!;
     public DbSet<MovieTagsV1> MovieTags { get; set; } = null!;
     public DbSet<StudioV1> Studio { get; set; } = null!;
-    public DbSet<MovieScheduleV1> Schedule { get; set; } = null!;
+    public DbSet<MovieScheduleV1> MovieSchedule { get; set; } = null!;
     public DbSet<Order> Order { get; set; } = null!;
     public DbSet<OrderItems> OrderItems { get; set; } = null!;
 }

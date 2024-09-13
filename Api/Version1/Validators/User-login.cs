@@ -1,10 +1,10 @@
-using dot_dotnet_test_api.Dtos;
+using dot_dotnet_test_api.API.Version1.Dtos;
 using FluentValidation;
 
-namespace dot_dotnet_test_api.Validators;
-public class UserV1LoginDtoValidator : AbstractValidator<UserV1LoginDto>
+namespace dot_dotnet_test_api.API.Version1.Validators;
+public class UserLoginDtoValidator : AbstractValidator<UserLoginDto>
 {
-    public UserV1LoginDtoValidator()
+    public UserLoginDtoValidator()
     {
 
         // Rule: Email should not be empty and must be a valid email format

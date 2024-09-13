@@ -5,7 +5,7 @@ using dot_dotnet_test_api.Contexts;
 using dot_dotnet_test_api.Dtos;
 using dot_dotnet_test_api.Helpers;
 using dot_dotnet_test_api.Types;
-using dot_dotnet_test_api.Validators;
+using dot_dotnet_test_api.API.Version1.Validators;
 using FluentValidation.Results;
 using EFCore.BulkExtensions;
 using System.Web;
@@ -122,7 +122,7 @@ namespace dot_dotnet_test_api.Controllers
             }
 
             var dtoDate = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date!);
-            var foundedScheduler = await _context.Schedule
+            var foundedScheduler = await _context.MovieSchedule
                 .Where(schedule => 
                     schedule.Movie!.Id == movieV1BackOfficeScheduleDto.MovieId
                     && schedule.Studio!.Id == movieV1BackOfficeScheduleDto.StudioId

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace dot_dotnet_test_api.Dtos;
-public class UserV1RegisterDto
+namespace dot_dotnet_test_api.API.Version1.Dtos;
+public class UserRegisterDto
 {
     public string Name { get; set; } = string.Empty;
 

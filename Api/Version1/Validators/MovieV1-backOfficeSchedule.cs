@@ -1,7 +1,7 @@
 using dot_dotnet_test_api.Dtos;
 using FluentValidation;
 
-namespace dot_dotnet_test_api.Validators;
+namespace dot_dotnet_test_api.API.Version1.Validators;
 public class MovieV1BackOfficeScheduleValidator : AbstractValidator<MovieV1BackOfficeScheduleDto>
 {
     public MovieV1BackOfficeScheduleValidator()

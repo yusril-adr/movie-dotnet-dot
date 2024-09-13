@@ -1,13 +1,11 @@
-using dot_dotnet_test_api.Contexts;
-using dot_dotnet_test_api.Dtos;
+using dot_dotnet_test_api.API.Version1.Dtos;
 using dot_dotnet_test_api.Helpers;
 using dot_dotnet_test_api.Models;
 using dot_dotnet_test_api.Repositories;
-using dot_dotnet_test_api.Services.UserResult;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace dot_dotnet_test_api.Services.UserService;
+namespace dot_dotnet_test_api.API.Version1.Services;
 
 public class UserService(
   IConfiguration configuration,
@@ -16,7 +14,7 @@ public class UserService(
   ILogger<UserService> logger
 )
 {
-  private IConfiguration _configuration = configuration;
+  private readonly IConfiguration _configuration = configuration;
 
   private readonly TokenService _tokenService = tokenService;
 
@@ -55,17 +53,17 @@ public class UserService(
     return deployedFilePath;
   }
 
-  public async Task<ContentResult> Register(UserV1RegisterDto userV1RegisterDto, HttpRequest request)
+  public async Task<ContentResult> Register(UserRegisterDto userRegisterDto, HttpRequest request)
   {
-    var avatarFileResult = await CopyAvatarFile(userV1RegisterDto.Avatar);
+    var avatarFileResult = await CopyAvatarFile(userRegisterDto.Avatar);
     var deployedFilePath = GetDeployedAvatarPath(avatarFileResult.FilePath, request);
 
     var createdUser = new User()
     {
-      Name = userV1RegisterDto.Name,
-      Email = userV1RegisterDto.Email,
+      Name = userRegisterDto.Name,
+      Email = userRegisterDto.Email,
       Avatar = avatarFileResult.FilePath,
-      Password = PasswordHasher.HashPassword(userV1RegisterDto.Password),
+      Password = PasswordHasher.HashPassword(userRegisterDto.Password),
     };
 
     try
@@ -96,9 +94,9 @@ public class UserService(
     return response.GetFormated(statusCode: StatusCodes.Status201Created);
   }
 
-  public async Task<ContentResult> Login(UserV1LoginDto userV1LoginDto, HttpRequest request)
+  public async Task<ContentResult> Login(UserLoginDto userLoginDto, HttpRequest request)
   {
-    var foundedUser = await _userRepository.FindByEmail(userV1LoginDto.Email);
+    var foundedUser = await _userRepository.FindByEmail(userLoginDto.Email);
     if (foundedUser == null)
     {
       return new Response<object>(
@@ -107,7 +105,7 @@ public class UserService(
       ).GetFormated(statusCode: StatusCodes.Status400BadRequest);
     }
 
-    var isPasswordValid = PasswordHasher.VerifyPassword(userV1LoginDto.Password, foundedUser.Password);
+    var isPasswordValid = PasswordHasher.VerifyPassword(userLoginDto.Password, foundedUser.Password);
     if (!isPasswordValid)
     {
       return new Response<object>(
