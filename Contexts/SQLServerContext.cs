@@ -41,9 +41,9 @@ public class SQLServerContext : DbContext
         // .WithMany(e => e.Movies)
         // .UsingEntity(
         //     "Movies_Tags"
-        //     // l => l.HasOne<TagV1>().WithMany().HasForeignKey(e => e.TagId),
-        //     // r => r.HasOne<MovieV1>().WithMany().HasForeignKey(e => e.MovieId)
-        //     // j => j.HasKey("movie_id", "tag_id")
+            // l => l.HasOne<TagV1>().WithMany().HasForeignKey(e => e.TagId),
+            // r => r.HasOne<MovieV1>().WithMany().HasForeignKey(e => e.MovieId)
+            // j => j.HasKey("movie_id", "tag_id")
         // );
 
         var tag = new TagV1
@@ -105,7 +105,6 @@ public class SQLServerContext : DbContext
     }
 
 
-    public DbSet<TodoItemV1> TodoItems { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<MovieV1> Movies { get; set; } = null!;
     public DbSet<TagV1> Tags { get; set; } = null!;
