@@ -104,6 +104,7 @@ public class MovieRepository(
         Title = movie.Title,
         Overview = movie.Overview,
         Poster = movie.Poster,
+        // Didnt use Include() because it will trigger loop reference
         MovieTags = movie.MovieTags!.Select((tag) => new MovieTags { Movie = movie, Tag = tag.Tag }).ToList(),
         MovieSchedules = movie.MovieSchedules!.Select(schedule =>
           new MovieSchedule {
