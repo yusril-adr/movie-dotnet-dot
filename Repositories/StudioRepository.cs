@@ -40,4 +40,9 @@ public class StudioRepository(IConfiguration configuration, SQLServerContext con
 
     return StudioList;
   }
+
+  public async Task<Studio?> FindById(long studioId) {
+    var foundedStudio = await _context.Studio.FindAsync(studioId);
+    return foundedStudio;
+  }
 }

@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Models;
@@ -14,7 +13,7 @@ public class MovieTags
     public long? Id { get;set; }
 
     [ForeignKey("movie_id")]
-    public virtual MovieV1? Movie { get; set; }
+    public virtual Movie? Movie { get; set; }
 
     [ForeignKey("tag_id")]
     public virtual Tag? Tag { get; set; }

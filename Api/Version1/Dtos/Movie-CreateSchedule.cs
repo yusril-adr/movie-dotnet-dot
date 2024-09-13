@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Dtos;
-public class MovieV1BackOfficeScheduleDto
+public class MovieScheduleCreateDto
 {
     [JsonProperty("movie_id")]
     public int? MovieId { get; set; }

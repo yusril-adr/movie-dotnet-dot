@@ -34,7 +34,7 @@ public class UserService(
     }
 
     var savedSplitedFileNames = filePath.Split('/');
-    var savedFileName = savedSplitedFileNames[savedSplitedFileNames.Length - 1];
+    var savedFileName = savedSplitedFileNames[^1];
 
     return new AvatarFileResult
     {
@@ -82,13 +82,7 @@ public class UserService(
 
 
     var response = new Response<RegisterResult>(
-        data: new RegisterResult
-        {
-          Id = createdUser.Id,
-          Email = createdUser.Email,
-          Name = createdUser.Name,
-          Avatar = deployedFilePath,
-        },
+        data: RegisterResult.MapJson(createdUser, deployedFilePath),
         message: "Register Success"
     );
     return response.GetFormated(statusCode: StatusCodes.Status201Created);
@@ -117,14 +111,7 @@ public class UserService(
     var deployedFilePath = GetDeployedAvatarPath(foundedUser.Avatar, request);
 
     return new Response<LoginResult>(
-        data: new LoginResult
-        {
-          Id = foundedUser.Id,
-          Email = foundedUser.Email,
-          Name = foundedUser.Name,
-          Avatar = deployedFilePath,
-          Token = _tokenService.CreateToken(foundedUser.Id),
-        },
+        data: LoginResult.MapJson(foundedUser, deployedFilePath, _tokenService.CreateToken(foundedUser.Id)),
         message: "Login Success"
     ).GetFormated();
   }
@@ -143,13 +130,7 @@ public class UserService(
     var deployedFilePath = GetDeployedAvatarPath(foundedUser.Avatar, request);
 
     return new Response<LoginByIdResult>(
-        data: new LoginByIdResult
-        {
-          Id = foundedUser.Id,
-          Email = foundedUser.Email,
-          Name = foundedUser.Name,
-          Avatar = deployedFilePath,
-        },
+        data: LoginByIdResult.MapJson(foundedUser, deployedFilePath),
         message: "Login By Token Success"
     ).GetFormated();
   }

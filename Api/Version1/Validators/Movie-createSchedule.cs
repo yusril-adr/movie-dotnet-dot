@@ -2,9 +2,9 @@ using dot_dotnet_test_api.Dtos;
 using FluentValidation;
 
 namespace dot_dotnet_test_api.API.Version1.Validators;
-public class MovieV1BackOfficeScheduleValidator : AbstractValidator<MovieV1BackOfficeScheduleDto>
+public class MovieScheduleCreateValidator : AbstractValidator<MovieScheduleCreateDto>
 {
-    public MovieV1BackOfficeScheduleValidator()
+    public MovieScheduleCreateValidator()
     {
         RuleFor(x => x.MovieId)
             .NotEmpty().WithMessage("movie_id is required");

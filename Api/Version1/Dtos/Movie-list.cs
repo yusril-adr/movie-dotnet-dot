@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Dtos;
-public class MovieV1ListDto
+public class MovieListDto
 {
     [FromQuery(Name = "page")]
     [JsonProperty("page")]

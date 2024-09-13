@@ -48,7 +48,7 @@ public class StudioService (
           Page = page,
           PerPage = perPage,
           TotalItem = tagCount,
-          totalPages = totalPage
+          TotalPages = totalPage
         }
     ).GetFormated();
   }

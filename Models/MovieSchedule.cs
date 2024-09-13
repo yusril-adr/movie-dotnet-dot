@@ -4,17 +4,16 @@ using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Movie_Schedules")]
-public class MovieScheduleV1
+[Table("movie_schedules")]
+public class MovieSchedule
 {
     [Column("id", TypeName = "bigint")]
     [Key]
     [Required]
-    [JsonProperty("id")]
     public long? Id { get;set; }
 
     [ForeignKey("movie_id")]
-    public virtual MovieV1? Movie { get; set; }
+    public virtual Movie? Movie { get; set; }
 
     [ForeignKey("studio_id")]
     public virtual Studio? Studio { get; set; }

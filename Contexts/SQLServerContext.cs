@@ -47,7 +47,7 @@ public class SQLServerContext : DbContext
         ]);
 
         //Seeding State Master Data using HasData method
-        var movie = new MovieV1
+        var movie = new Movie
         {
             Id = 9981, // Get from TMDB API
             Title = "Avengers: Age of Ultron",
@@ -56,7 +56,7 @@ public class SQLServerContext : DbContext
             MovieTags = [],
         };
         
-        modelBuilder.Entity<MovieV1>().HasData(
+        modelBuilder.Entity<Movie>().HasData(
             movie
         );
 
@@ -86,11 +86,11 @@ public class SQLServerContext : DbContext
 
 
     public DbSet<User> User { get; set; } = null!;
-    public DbSet<MovieV1> Movies { get; set; } = null!;
+    public DbSet<Movie> Movie { get; set; } = null!;
     public DbSet<Tag> Tag { get; set; } = null!;
     public DbSet<MovieTags> MovieTags { get; set; } = null!;
     public DbSet<Studio> Studio { get; set; } = null!;
-    public DbSet<MovieScheduleV1> MovieSchedule { get; set; } = null!;
+    public DbSet<MovieSchedule> MovieSchedule { get; set; } = null!;
     public DbSet<Order> Order { get; set; } = null!;
     public DbSet<OrderItems> OrderItems { get; set; } = null!;
 }

@@ -17,7 +17,7 @@ public class OrderItems
     public virtual Order? Order { get; set; }
 
     [ForeignKey("movie_schedule_id")]
-    public virtual MovieScheduleV1? MovieSchedule { get; set; }
+    public virtual MovieSchedule? MovieSchedule { get; set; }
 
     [Column("qty")]
     public int? Qty { get; set; }

@@ -15,8 +15,9 @@ public class TagRepository(
   private readonly SQLServerContext _context = context;
   private readonly ILogger<TagRepository> _logger = logger;
 
-  public async Task<int> Count() {
-    return await _context.Tag.CountAsync();
+  public async Task<Tag?> FindById(long tagId) {
+    var foundedTag = await _context.Tag.FindAsync(tagId);
+    return foundedTag;
   }
 
   public async Task<List<Tag>> FindAllPagination(int page, int perPage) {
@@ -35,5 +36,13 @@ public class TagRepository(
       .ToListAsync();
 
     return TagList;
+  }
+
+  public async Task<int> Count() {
+    return await _context.Tag.CountAsync();
+  }
+
+  public async Task DeleteMovieTagsByMovieId(long movieId) {
+    await _context.MovieTags.Where((mt) => mt.Movie!.Id == movieId).ExecuteDeleteAsync();
   }
 }

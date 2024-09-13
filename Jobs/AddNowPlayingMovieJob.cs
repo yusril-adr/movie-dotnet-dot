@@ -36,12 +36,12 @@ namespace dot_dotnet_test_api.Jobs
       var response = await client.GetAsync(request);
       var data = JsonConvert.DeserializeObject<TMDBNowPlaying>(response!.Content!);
       var movieList = data!.Results;
-      MovieV1[] formatedMovieList = new MovieV1[movieList.Length];
+      Movie[] formatedMovieList = new Movie[movieList.Length];
 
       int i = 0;
       foreach (var movie in movieList)
       {
-        var mov = new MovieV1(){
+        var mov = new Movie(){
           Id = movie.TmdbId,
           Poster = $"https://image.tmdb.org/t/p/original{movie.BackdropPath}",
           Title = movie.Title,

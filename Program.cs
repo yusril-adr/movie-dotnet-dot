@@ -110,7 +110,11 @@ builder.Services.AddScoped<AddNowPlayingMovieJob>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 
+builder.Services.AddScoped<MovieRepository>();
+builder.Services.AddScoped<MovieService>();
+
 builder.Services.AddScoped<MovieScheduleRepository>();
+builder.Services.AddScoped<MovieScheduleService>();
 
 builder.Services.AddScoped<TagRepository>();
 builder.Services.AddScoped<TagService>();

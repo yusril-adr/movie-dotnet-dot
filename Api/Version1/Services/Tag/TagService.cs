@@ -1,6 +1,5 @@
 using Coravel.Queuing.Interfaces;
 using dot_dotnet_test_api.Helpers;
-using dot_dotnet_test_api.Models;
 using dot_dotnet_test_api.Repositories;
 using dot_dotnet_test_api.Types;
 using dot_dotnet_test_api.API.Version1.Dtos;
@@ -51,7 +50,7 @@ public class TagService(
         Page = page,
         PerPage = perPage,
         TotalItem = tagCount,
-        totalPages = totalPage,
+        TotalPages = totalPage,
       }
     ).GetFormated();
   }

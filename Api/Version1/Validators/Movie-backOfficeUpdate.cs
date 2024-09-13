@@ -2,9 +2,9 @@ using dot_dotnet_test_api.Dtos;
 using FluentValidation;
 
 namespace dot_dotnet_test_api.API.Version1.Validators;
-public class MovieV1BackOfficeUpdateValidator : AbstractValidator<MovieV1BackOfficeUpdateDto>
+public class MovieBackOfficeUpdateValidator : AbstractValidator<MovieBackOfficeUpdateDto>
 {
-    public MovieV1BackOfficeUpdateValidator()
+    public MovieBackOfficeUpdateValidator()
     {
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("title is required");

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Dtos;
-public class MovieV1BackOfficeUpdateDto
+public class MovieBackOfficeUpdateDto
 {
     [JsonProperty("title")]
     public string? Title { get; set; }
@@ -11,6 +11,7 @@ public class MovieV1BackOfficeUpdateDto
     [JsonProperty("poster")]
     public IFormFile? Poster { get; set; }
 
+    // TODO for learning
     // [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:YYYY-MM-DD HH:mm}")]
     [FromForm(Name = "play_until")]
     [JsonProperty("play_until")]

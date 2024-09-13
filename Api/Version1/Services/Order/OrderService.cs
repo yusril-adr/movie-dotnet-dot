@@ -13,13 +13,11 @@ public class OrderService (
   UserRepository userRepository,
   OrderRepository orderRepository,
   MovieScheduleRepository movieScheduleRepository,
-  TokenService tokenService,
   IQueue queue,
   ILogger<OrderService> logger
 )
 {
   private readonly IConfiguration _configuration = configuration;
-  private readonly TokenService _tokenService = tokenService;
   private readonly UserRepository _userRepository = userRepository;
   private readonly OrderRepository _orderRepository = orderRepository;
   private readonly MovieScheduleRepository _movieScheduleRepository = movieScheduleRepository;
@@ -110,7 +108,6 @@ public class OrderService (
 
     var orderItems = new OrderItems[orderCreateOrViewDto.Items!.Length];
     int totalPriceAll = 0;
-    int totalQty = 0;
     int idx = 0;
 
     foreach (var item in orderCreateOrViewDto.Items)
@@ -154,7 +151,6 @@ public class OrderService (
 
       foundedSchedule.RemainingSeat -= item.Qty;
 
-      totalQty += (int)item.Qty;
       totalPriceAll += SubTotalPrice;
       orderItems[idx++] = orderItem;
 
@@ -180,19 +176,7 @@ public class OrderService (
     _queue.QueueInvocableWithPayload<EmailInvocable, EmailMessage>(emailMessage);
 
     return new Response<PreviewOrderResult>(
-        data: new PreviewOrderResult
-        {
-          TotalQty = totalQty,
-          TotalPrice = order.TotalItemPrice == null ? 0 : (int)order.TotalItemPrice,
-          ItemDetails = order.OrderItems.Select(item => new PreviewOrderDetailResult
-          {
-            StudioNumber = item.MovieSchedule!.Studio!.StudioNumber,
-            Qty = item.Qty == null ? 0 : (int)item.Qty,
-            SubTotalPrice = item.SubTotalPrice == null ? 0 : (int)item.SubTotalPrice,
-            StartTime = item.MovieSchedule.StartTime,
-            EndTime = item.MovieSchedule.EndTime
-          }).ToArray(),
-        },
+        data: PreviewOrderResult.MapJson(order),
         message: "Checkout Order Success"
     ).GetFormated();
   }

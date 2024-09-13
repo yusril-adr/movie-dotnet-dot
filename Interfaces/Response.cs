@@ -12,13 +12,7 @@ namespace dot_dotnet_test_api.Interfaces;
     int TotalItem { get;set; }
 
     [JsonProperty("total_pages")]
-    int totalPages { get; set; }
-
-    [JsonProperty("next_page_link")]
-    string? NextPageLink { get; set; }
-    
-    [JsonProperty("previous_page_link")]
-    string? PreviousPageLink { get; set; }
+    int TotalPages { get; set; }
   }
 
   public interface IResponse<T>
