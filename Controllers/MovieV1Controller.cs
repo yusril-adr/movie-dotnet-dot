@@ -44,7 +44,7 @@ namespace dot_dotnet_test_api.Controllers
 
             if (movieV1ListDto.Date != null) {
                 movieQuery = movieQuery.Where(movie => 
-                    movie.MovieSchedules.Where(schedule => schedule.Date == movieV1ListDto.Date).ToArray().Length > 0
+                    movie.MovieSchedules!.Where(schedule => schedule.Date == movieV1ListDto.Date).ToArray().Length > 0
                 );
             }
 

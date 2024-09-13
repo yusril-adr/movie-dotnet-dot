@@ -26,8 +26,6 @@ public class Response<T> : IResponse<T?>
 
   public T? Data { get; set; }
 
-  public IPagination? Pagination { get; set; } = null;
-
   public Response(T? data = default, string? message = default, string? error = default)
   {
     Message = message;
@@ -101,8 +99,8 @@ public PaginationResponse(T items, Pagination pagination, string? message = defa
 
     // Serialize the object to JSON
     var jsonResponse = JsonConvert.SerializeObject(new {
-      Success = this.Success,
-      Message = this.Message,
+      this.Success,
+      this.Message,
       Data = new {
         items = this.Items,
         pagination = this.Pagination,
@@ -128,8 +126,8 @@ public class Unit { }
 
 public class ValidationErrorResponse : Response<Unit>
 {
-  public bool Success { get; set; } = false;
-  public string Message { get; set; } = "Validation Failed";
+  public new bool Success { get; set; } = false;
+  public new string Message { get; set; } = "Validation Failed";
 
   public List<ValidationErrorResponseField> Errors { get; set; } = [];
 

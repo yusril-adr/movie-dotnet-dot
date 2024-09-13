@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Orders")]
-public class OrderV1
+[Table("orders")]
+public class Order
 {
     [Column("id", TypeName = "bigint")]
     [Key]
@@ -20,8 +19,7 @@ public class OrderV1
     public int? TotalItemPrice { get; set; }
 
     [InverseProperty("Order")]
-    public virtual ICollection<OrderItemsV1>? OrderItems { get; set; }
-
+    public virtual ICollection<OrderItems>? OrderItems { get; set; }
 
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; } = DateTime.Now;

@@ -38,7 +38,7 @@ namespace dot_dotnet_test_api.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _context.Users.FindAsync(Convert.ToInt64(userId));
 
-            var orderItems = new OrderItemsV1[transactionV1OrderDto.Items.Length];
+            var orderItems = new OrderItems[transactionV1OrderDto.Items!.Length];
             int totalPriceAll = 0;
             int totalQty = 0;
             int idx = 0;
@@ -47,7 +47,7 @@ namespace dot_dotnet_test_api.Controllers
 
                 var foundedSchedule = await _context.Schedule
                     .Include(x => x.Studio)
-                    .Where(x => x.Id == (long)item.MovieScheduleId)
+                    .Where(x => x.Id == (long)item.MovieScheduleId!)
                     .SingleOrDefaultAsync();
 
                 if (foundedSchedule == null)
@@ -69,7 +69,7 @@ namespace dot_dotnet_test_api.Controllers
                 }
 
                 var shceduleStudioCount = await _context.OrderItems
-                    .Where(x => x.MovieSchedule.Id == (long)item.MovieScheduleId)
+                    .Where(x => x.MovieSchedule!.Id == (long)item.MovieScheduleId!)
                     .SumAsync(x => x.Qty);
 
                 if (foundedSchedule.RemainingSeat < item.Qty)
@@ -80,8 +80,8 @@ namespace dot_dotnet_test_api.Controllers
                     ).GetFormated(StatusCodes.Status400BadRequest);
                 }
 
-                var SubTotalPrice = foundedSchedule.Price * (int)item.Qty;
-                var orderItem = new OrderItemsV1
+                var SubTotalPrice = foundedSchedule.Price * (int) item.Qty!;
+                var orderItem = new OrderItems
                 {
                     MovieSchedule = foundedSchedule,
                     Price = foundedSchedule.Price,
@@ -94,7 +94,7 @@ namespace dot_dotnet_test_api.Controllers
                 orderItems[idx++] = orderItem;
             }
 
-            var order = new OrderV1
+            var order = new Order
             {
                 User = user,
                 OrderItems = orderItems,
@@ -134,7 +134,7 @@ namespace dot_dotnet_test_api.Controllers
             var user = await _context.Users.FindAsync(Convert.ToInt64(userId));
 
 
-            var orderItems = new OrderItemsV1[transactionV1OrderDto.Items.Length];
+            var orderItems = new OrderItems[transactionV1OrderDto.Items!.Length];
             int totalPriceAll = 0;
             int totalQty = 0;
             int idx = 0;
@@ -142,7 +142,7 @@ namespace dot_dotnet_test_api.Controllers
             {
                 var foundedSchedule = await _context.Schedule
                     .Include(x => x.Studio)
-                    .Where(x => x.Id == (long)item.MovieScheduleId)
+                    .Where(x => x.Id == (long)item.MovieScheduleId!)
                     .SingleOrDefaultAsync();
 
                 if (foundedSchedule == null)
@@ -164,7 +164,7 @@ namespace dot_dotnet_test_api.Controllers
                 }
 
                 var shceduleStudioCount = await _context.OrderItems
-                    .Where(x => x.MovieSchedule.Id == (long)item.MovieScheduleId)
+                    .Where(x => x.MovieSchedule!.Id == (long) item.MovieScheduleId!)
                     .SumAsync(x => x.Qty);
 
                 if (foundedSchedule.RemainingSeat < item.Qty)
@@ -175,8 +175,8 @@ namespace dot_dotnet_test_api.Controllers
                     ).GetFormated(StatusCodes.Status400BadRequest);
                 }
 
-                var SubTotalPrice = foundedSchedule.Price * (int)item.Qty;
-                var orderItem = new OrderItemsV1
+                var SubTotalPrice = foundedSchedule.Price * (int) item.Qty!;
+                var orderItem = new OrderItems
                 {
                     MovieSchedule = foundedSchedule,
                     Price = foundedSchedule.Price,
@@ -194,7 +194,7 @@ namespace dot_dotnet_test_api.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            var order = new OrderV1
+            var order = new Order
             {
                 User = user,
                 OrderItems = orderItems,

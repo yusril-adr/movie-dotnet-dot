@@ -103,7 +103,7 @@ namespace dot_dotnet_test_api.Controllers
 
             if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Add Schedule Movie Failed");
 
-            var foundedMovie = await _context.Movies.FindAsync((long) movieV1BackOfficeScheduleDto.MovieId);
+            var foundedMovie = await _context.Movies.FindAsync((long) movieV1BackOfficeScheduleDto.MovieId!);
             if (foundedMovie == null) 
             {
                 return new Response<object>(
@@ -112,7 +112,7 @@ namespace dot_dotnet_test_api.Controllers
                 ).GetFormated(statusCode: StatusCodes.Status404NotFound);
             }
 
-            var foundedStudio = await _context.Studio.FindAsync((long) movieV1BackOfficeScheduleDto.StudioId);
+            var foundedStudio = await _context.Studio.FindAsync((long) movieV1BackOfficeScheduleDto.StudioId!);
             if (foundedStudio == null) 
             {
                 return new Response<object>(
@@ -121,11 +121,11 @@ namespace dot_dotnet_test_api.Controllers
                 ).GetFormated(statusCode: StatusCodes.Status404NotFound);
             }
 
-            var dtoDate = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date);
+            var dtoDate = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date!);
             var foundedScheduler = await _context.Schedule
                 .Where(schedule => 
-                    schedule.Movie.Id == movieV1BackOfficeScheduleDto.MovieId
-                    && schedule.Studio.Id == movieV1BackOfficeScheduleDto.StudioId
+                    schedule.Movie!.Id == movieV1BackOfficeScheduleDto.MovieId
+                    && schedule.Studio!.Id == movieV1BackOfficeScheduleDto.StudioId
                     && schedule.Date == dtoDate
                 ).ToListAsync();
             
@@ -152,10 +152,10 @@ namespace dot_dotnet_test_api.Controllers
             var createdSchedule = new MovieScheduleV1 {
                 Movie = foundedMovie,
                 Studio = foundedStudio,
-                StartTime = movieV1BackOfficeScheduleDto.StartTime,
-                EndTime = movieV1BackOfficeScheduleDto.EndTime,
+                StartTime = movieV1BackOfficeScheduleDto.StartTime!,
+                EndTime = movieV1BackOfficeScheduleDto.EndTime!,
                 Date = DateOnly.FromDateTime((DateTime) movieV1BackOfficeScheduleDto.Date),
-                Price = (int) movieV1BackOfficeScheduleDto.Price,
+                Price = (int) movieV1BackOfficeScheduleDto.Price!,
                 RemainingSeat = foundedStudio.SeatCapacity,
             };
 
@@ -203,7 +203,7 @@ namespace dot_dotnet_test_api.Controllers
             }
 
 
-            var movieTags = new MovieTagsV1[movieV1BackOfficeUpdateDto.Tags.Length];
+            var movieTags = new MovieTagsV1[movieV1BackOfficeUpdateDto.Tags!.Length];
 
             int i = 0;
             string[] errors = [];
@@ -232,8 +232,8 @@ namespace dot_dotnet_test_api.Controllers
 
             _context.MovieTags.Where((mt) => mt.Movie!.Id == movieId).ExecuteDelete();
 
-            foundedMovie.Title = movieV1BackOfficeUpdateDto!.Title;
-            foundedMovie.Overview = movieV1BackOfficeUpdateDto!.Overview;
+            foundedMovie.Title = movieV1BackOfficeUpdateDto.Title!;
+            foundedMovie.Overview = movieV1BackOfficeUpdateDto.Overview!;
             foundedMovie.PlayUntil = movieV1BackOfficeUpdateDto.PlayUntil;
             foundedMovie.MovieTags = movieTags;
             foundedMovie.UpdatedAt = DateTime.Now;

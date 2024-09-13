@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.Models;
 
-[Table("Order_Items")]
-public class OrderItemsV1
+[Table("order_items")]
+public class OrderItems
 {
     [Column("id", TypeName = "bigint")]
     [Key]
@@ -14,7 +14,7 @@ public class OrderItemsV1
     public long? Id { get;set; }
 
     [ForeignKey("order_id")]
-    public virtual OrderV1? Order { get; set; }
+    public virtual Order? Order { get; set; }
 
     [ForeignKey("movie_schedule_id")]
     public virtual MovieScheduleV1? MovieSchedule { get; set; }

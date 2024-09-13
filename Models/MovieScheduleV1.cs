@@ -23,10 +23,10 @@ public class MovieScheduleV1
     public int? RemainingSeat { get; set; }
 
     [Column("start_time", TypeName = "VARCHAR(255)")]
-    public string StartTime { get; set; }
+    public required string StartTime { get; set; }
 
     [Column("end_time", TypeName = "VARCHAR(255)")]
-    public string EndTime { get; set; }
+    public required string EndTime { get; set; }
 
     [Column("price")]
     public int Price { get; set; }

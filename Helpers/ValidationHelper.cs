@@ -15,7 +15,7 @@ public class ValidationHelper
         var error = errors.Find(e => e.Property == failure.PropertyName);
         var errorIdx = errors.FindIndex(e => e.Property == failure.PropertyName);
         error?.Messages.Add(failure.ErrorMessage);
-        errors[errorIdx] = error;
+        errors[errorIdx] = error!;
       }
       else
       {

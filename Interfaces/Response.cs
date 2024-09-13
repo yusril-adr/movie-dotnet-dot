@@ -29,6 +29,4 @@ namespace dot_dotnet_test_api.Interfaces;
     string? Message { get; set; }
 
     T? Data { get; set; }
-
-    IPagination? Pagination { get; set; }
   }

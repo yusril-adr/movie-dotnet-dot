@@ -111,6 +111,6 @@ public class SQLServerContext : DbContext
     public DbSet<MovieTagsV1> MovieTags { get; set; } = null!;
     public DbSet<StudioV1> Studio { get; set; } = null!;
     public DbSet<MovieScheduleV1> Schedule { get; set; } = null!;
-    public DbSet<OrderV1> Order { get; set; } = null!;
-    public DbSet<OrderItemsV1> OrderItems { get; set; } = null!;
+    public DbSet<Order> Order { get; set; } = null!;
+    public DbSet<OrderItems> OrderItems { get; set; } = null!;
 }

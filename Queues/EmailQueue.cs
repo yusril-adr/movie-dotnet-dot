@@ -5,7 +5,7 @@ using dot_dotnet_test_api.Types;
 
 public class EmailInvocable : IInvocableWithPayload<EmailMessage>, IInvocable
 {
-  public EmailMessage Payload { get; set; }
+  public required EmailMessage Payload { get; set; }
   private readonly SmtpClient _smtpClient;
 
   private readonly IConfiguration _configuration;
@@ -24,6 +24,6 @@ public class EmailInvocable : IInvocableWithPayload<EmailMessage>, IInvocable
   public async Task Invoke()
   {
     Console.WriteLine("Email send");
-    _smtpClient.Send(_configuration["Gmail:email"]!, Payload.To, Payload.Subject, Payload.Body);
+    await _smtpClient.SendMailAsync(_configuration["Gmail:email"]!, Payload.To, Payload.Subject, Payload.Body);
   }
 }
