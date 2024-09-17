@@ -109,7 +109,7 @@ public class SQLServerContext : DbContext
             StudioId = studio1.Id,
             StartTime = "15:00",
             EndTime = "17:00",
-            RemainingSeat = studio1.SeatCapacity,
+            RemainingSeat = studio1.SeatCapacity - 3,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Price = 15000,
         };
@@ -119,7 +119,7 @@ public class SQLServerContext : DbContext
             StudioId = studio1.Id,
             StartTime = "08:00",
             EndTime = "10:00",
-            RemainingSeat = studio1.SeatCapacity,
+            RemainingSeat = studio1.SeatCapacity - 1,
             Date = DateOnly.FromDateTime(DateTime.Now),
             Price = 15000,
         };

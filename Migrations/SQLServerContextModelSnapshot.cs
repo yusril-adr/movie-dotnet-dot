@@ -67,22 +67,22 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 9981L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(460),
                             Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
-                            PlayUntil = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
+                            PlayUntil = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(460),
                             Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
                             Title = "Avengers: Age of Ultron",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(460)
                         },
                         new
                         {
                             Id = 24428L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(470),
                             Overview = "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
-                            PlayUntil = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
+                            PlayUntil = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(470),
                             Poster = "https://image.tmdb.org/t/p/original/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
                             Title = "The Avengers",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7170)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(470)
                         });
                 });
 
@@ -149,20 +149,20 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7260),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(620),
                             Date = new DateOnly(2024, 9, 17),
                             EndTime = "17:00",
                             MovieId = 9981L,
                             Price = 15000,
-                            RemainingSeat = 50,
+                            RemainingSeat = 47,
                             StartTime = "15:00",
                             StudioId = 1L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7260)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(620)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7290),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(660),
                             Date = new DateOnly(2024, 9, 17),
                             EndTime = "17:10",
                             MovieId = 9981L,
@@ -170,25 +170,25 @@ namespace dot_dotnet_test_api.Migrations
                             RemainingSeat = 50,
                             StartTime = "15:10",
                             StudioId = 2L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7290)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(660)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7270),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(640),
                             Date = new DateOnly(2024, 9, 17),
                             EndTime = "10:00",
                             MovieId = 24428L,
                             Price = 15000,
-                            RemainingSeat = 50,
+                            RemainingSeat = 49,
                             StartTime = "08:00",
                             StudioId = 1L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7270)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(640)
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7300),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(660),
                             Date = new DateOnly(2024, 9, 17),
                             EndTime = "10:30",
                             MovieId = 24428L,
@@ -196,7 +196,7 @@ namespace dot_dotnet_test_api.Migrations
                             RemainingSeat = 50,
                             StartTime = "08:30",
                             StudioId = 2L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7300)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(660)
                         });
                 });
 
@@ -241,10 +241,10 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7210),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(570),
                             MovieId = 9981L,
                             TagId = 1L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7210)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(570)
                         });
                 });
 
@@ -287,9 +287,9 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7310),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(680),
                             TotalItemPrice = 60000,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7310),
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(680),
                             UserId = 1L
                         });
                 });
@@ -347,22 +347,22 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7330),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(700),
                             MovieScheduleId = 1L,
                             OrderId = 1L,
                             Qty = 3,
                             SubTotalPrice = 45000,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7330)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(700)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7340),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(700),
                             MovieScheduleId = 3L,
                             OrderId = 1L,
                             Qty = 1,
                             SubTotalPrice = 15000,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7340)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(710)
                         });
                 });
 
@@ -403,34 +403,34 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7220),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(580),
                             SeatCapacity = 50,
                             StudioNumber = 1,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7220)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(580)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7230),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(580),
                             SeatCapacity = 50,
                             StudioNumber = 2,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7230)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(580)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7240),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(600),
                             SeatCapacity = 50,
                             StudioNumber = 3,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7240)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(600)
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7250),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(600),
                             SeatCapacity = 50,
                             StudioNumber = 4,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7250)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(610)
                         });
                 });
 
@@ -468,23 +468,23 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7090),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(390),
                             Name = "Action",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7100)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(400)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(440),
                             Name = "Comedy",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(440)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(450),
                             Name = "Fantasy",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140)
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 683, DateTimeKind.Local).AddTicks(450)
                         });
                 });
 
@@ -545,13 +545,13 @@ namespace dot_dotnet_test_api.Migrations
                         {
                             Id = 1L,
                             Avatar = "./files/images/avatar/example.png",
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 173, DateTimeKind.Local).AddTicks(8760),
+                            CreatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 673, DateTimeKind.Local).AddTicks(2840),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@getnada.com",
                             Is_admin = false,
                             Name = "user test",
-                            Password = "hJ/YEEHqSaSEx6+hEn1c5XdO3siizSMdTbzI1jwTtTZbkAmHhbKytJB1rn+ERZ+p",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 173, DateTimeKind.Local).AddTicks(8770)
+                            Password = "AclkvCt6TWcv/GWFkTLTfRrGe9mO2rThzjc4pGUxT+bwxarFmWJhIhX41P7XqmT3",
+                            UpdatedAt = new DateTime(2024, 9, 17, 17, 12, 55, 673, DateTimeKind.Local).AddTicks(2900)
                         });
                 });
 
