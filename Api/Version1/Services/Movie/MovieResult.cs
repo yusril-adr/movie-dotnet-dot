@@ -1,15 +1,8 @@
 
 using dot_dotnet_test_api.Models;
 using Newtonsoft.Json;
-using NuGet.Protocol;
 
 namespace dot_dotnet_test_api.API.Version1.Services;
-
-public class PosterFileResult {
-  public required string FilePath { get; set; }
-
-  public required string SavedFileName { get; set; }
-};
 
 public class MovieTagResult {
   [JsonProperty("id")]

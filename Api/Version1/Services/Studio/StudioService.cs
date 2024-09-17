@@ -11,13 +11,11 @@ namespace dot_dotnet_test_api.API.Version1.Services;
 public class StudioService (
   IConfiguration configuration,
   StudioRepository studioRepository,
-  TokenService tokenService,
   IQueue queue,
   ILogger<StudioService> logger
 )
 {
   private readonly IConfiguration _configuration = configuration;
-  private readonly TokenService _tokenService = tokenService;
   private readonly StudioRepository _studioRepository = studioRepository;
   private readonly IQueue _queue = queue;
 

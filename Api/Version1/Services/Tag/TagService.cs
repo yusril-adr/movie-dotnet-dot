@@ -10,13 +10,11 @@ namespace dot_dotnet_test_api.API.Version1.Services;
 public class TagService(
   IConfiguration configuration,
   TagRepository tagRepository,
-  TokenService tokenService,
   IQueue queue,
   ILogger<TagService> logger
 )
 {
   private readonly IConfiguration _configuration = configuration;
-  private readonly TokenService _tokenService = tokenService;
   private readonly TagRepository _tagRepository = tagRepository;
   private readonly IQueue _queue = queue;
 

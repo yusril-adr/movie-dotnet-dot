@@ -101,10 +101,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddDbContext<SQLServerContext>(opt =>
     opt.UseSqlServer(connectionString));
 
+builder.Services.AddSingleton<TokenHelper>();
+builder.Services.AddSingleton<FileHelper>();
+
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 builder.Services.AddTransient<EmailInvocable>();
 
-builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AddNowPlayingMovieJob>();
 
 builder.Services.AddScoped<UserRepository>();

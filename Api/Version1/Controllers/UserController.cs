@@ -58,8 +58,8 @@ namespace dot_dotnet_test_api.API.Version1.Controllers
             // var splitedAuthHeaders = Request.Headers.Authorization.ToString().Split(" ");
             // var jwtString = splitedAuthHeaders[splitedAuthHeaders.Length - 1];
 
-            // var jwt = _tokenService.ConvertJwtStringToJwtSecurityToken(jwtString);
-            // var decoded = _tokenService.DecodeToken(jwt);
+            // var jwt = _tokenHelper.ConvertJwtStringToJwtSecurityToken(jwtString);
+            // var decoded = _tokenHelper.DecodeToken(jwt);
 
             return await _userService.LoginByToken(Convert.ToInt64(userId), Request);
         }

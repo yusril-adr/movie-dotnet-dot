@@ -20,6 +20,12 @@ public class TagRepository(
     return foundedTag;
   }
 
+
+  public async Task<List<Tag>> FindByIds(List<long> ids) {
+    var foundedTag = await _context.Tag.Where(tag => ids.Contains((long) tag.Id!)).ToListAsync();
+    return foundedTag;
+  }
+
   public async Task<List<Tag>> FindAllPagination(int page, int perPage) {
     var offset = (page - 1) * perPage;
 

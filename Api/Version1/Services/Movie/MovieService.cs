@@ -1,4 +1,3 @@
-using Coravel.Queuing.Interfaces;
 using dot_dotnet_test_api.Helpers;
 using dot_dotnet_test_api.Repositories;
 using dot_dotnet_test_api.Types;
@@ -6,8 +5,6 @@ using dot_dotnet_test_api.API.Version1.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using dot_dotnet_test_api.Dtos;
 using dot_dotnet_test_api.Models;
-using dot_dotnet_test_api.Contexts;
-using NuGet.Protocol;
 
 namespace dot_dotnet_test_api.API.Version1.Services;
 
@@ -17,6 +14,7 @@ public class MovieService(
   StudioRepository studioRepository,
   MovieScheduleRepository movieScheduleRepository,
   TagRepository tagRepository,
+  FileHelper fileHelper,
   ILogger<MovieService> logger
 )
 {
@@ -25,29 +23,8 @@ public class MovieService(
   private readonly StudioRepository _studioRepository = studioRepository;
   private readonly MovieScheduleRepository _movieScheduleRepository = movieScheduleRepository;
   private readonly TagRepository _tagRepository = tagRepository;
-
+  private readonly FileHelper _fileHelper = fileHelper;
   private readonly ILogger<MovieService> _logger = logger;
-
-  private static async Task<PosterFileResult> CopyPosterFile(IFormFile poster)
-  {
-    var splittedFileNames = poster.FileName.Split(".");
-    var fileExtension = splittedFileNames[splittedFileNames.Length - 1];
-    var filePath = Path.Combine("./files/images/poster", Path.GetRandomFileName() + "-movie" + "." + fileExtension);
-
-    using (var stream = File.Create(filePath))
-    {
-      await poster.CopyToAsync(stream);
-    }
-
-    var savedSplitedFileNames = filePath.Split('/');
-    var savedFileName = savedSplitedFileNames[^1];
-
-    return new PosterFileResult
-    {
-      SavedFileName = savedFileName,
-      FilePath = filePath
-    };
-  }
 
   private static string GetDeployedPosterPath(Movie movie, HttpRequest request)
   {
@@ -57,7 +34,7 @@ public class MovieService(
     return deployedFilePath;
   }
 
-  private List<Movie> MapPosterPath(List<Movie> movieList, HttpRequest request)
+  private static List<Movie> MapPosterPath(List<Movie> movieList, HttpRequest request)
   {
     List<Movie> mappedResult = movieList;
 
@@ -114,7 +91,7 @@ public class MovieService(
     var perPage = movieListDto.PerPage;
     var movieCount = await _movieRepository.FindAllWithScheduleCount(movieListDto.Keyword, movieListDto.Date);
 
-    var totalPage = (int)Math.Ceiling((double) movieCount / perPage);
+    var totalPage = (int)Math.Ceiling((double)movieCount / perPage);
     if (page > totalPage && totalPage != 0 && page > 1)
     {
       return new Response<object>(
@@ -139,7 +116,7 @@ public class MovieService(
     ).GetFormated();
   }
   public async Task<ContentResult> UpdateMovie(
-    long movieId, MovieBackOfficeUpdateDto movieV1BackOfficeUpdateDto, HttpRequest request
+    long movieId, MovieBackOfficeUpdateDto movieBackOfficeUpdateDto, HttpRequest request
   )
   {
     var foundedMovie = await _movieRepository.FindById(movieId);
@@ -152,48 +129,55 @@ public class MovieService(
       ).GetFormated(statusCode: StatusCodes.Status404NotFound);
     }
 
-    var movieTags = new MovieTags[movieV1BackOfficeUpdateDto.Tags!.Length];
+    long[]? tagIds = movieBackOfficeUpdateDto.Tags;
 
-    // Validate tag is exist by id
-    int i = 0;
-    string[] errors = [];
-    foreach (var tag in movieV1BackOfficeUpdateDto.Tags)
+    if (tagIds != null)
     {
-      var foundedTag = await _tagRepository.FindById(tag);
+      var foundTags = await _tagRepository.FindByIds([.. tagIds]);
+      var foundTagsDict = foundTags.ToDictionary(tag => (long)tag.Id!);
 
-      if (foundedTag == null)
+      var errors = new List<string>();
+      var movieTags = new List<MovieTags>();
+
+      foreach (var tagId in tagIds)
       {
-        errors.Append($"Tag with id {tag} Not Found");
+        if (!foundTagsDict.TryGetValue(tagId, out var foundedTag))
+        {
+          errors.Add($"Tag with id {tagId} Not Found");
+        }
+        else
+        {
+          movieTags.Add(new MovieTags
+          {
+            Tag = foundedTag,
+            Movie = foundedMovie,
+          });
+        }
       }
 
-      var movieTag = new MovieTags
+      if (errors.Count != 0)
       {
-        Tag = foundedTag,
-        Movie = foundedMovie,
-      };
-
-      movieTags[i++] = movieTag;
+        return new Response<object>(
+            error: string.Join(", ", errors),
+            message: "Update Movie Failed"
+        ).GetFormated(statusCode: StatusCodes.Status404NotFound);
+      }
+      await _tagRepository.DeleteMovieTagsByMovieId((long)foundedMovie.Id!);
+      foundedMovie.MovieTags = movieTags;
     }
 
-    if (errors.Length > 0)
-    {
-      return new Response<object>(
-          error: errors[0],
-          message: "Update Movie Failed"
-      ).GetFormated(statusCode: StatusCodes.Status404NotFound);
-    }
-
-    await _tagRepository.DeleteMovieTagsByMovieId((long)foundedMovie.Id!);
-
-    foundedMovie.Title = movieV1BackOfficeUpdateDto.Title!;
-    foundedMovie.Overview = movieV1BackOfficeUpdateDto.Overview!;
-    foundedMovie.PlayUntil = movieV1BackOfficeUpdateDto.PlayUntil;
-    foundedMovie.MovieTags = movieTags;
+    foundedMovie.Title = movieBackOfficeUpdateDto.Title!;
+    foundedMovie.Overview = movieBackOfficeUpdateDto.Overview!;
+    foundedMovie.PlayUntil = movieBackOfficeUpdateDto.PlayUntil;
     foundedMovie.UpdatedAt = DateTime.Now;
 
-    if (movieV1BackOfficeUpdateDto.Poster != null)
+    if (movieBackOfficeUpdateDto.Poster != null)
     {
-      var copyedFile = await CopyPosterFile(movieV1BackOfficeUpdateDto.Poster);
+      var copyedFile = await FileHelper.CopyFile(
+        file: movieBackOfficeUpdateDto.Poster,
+        path: "./files/images/poster",
+        prefix: "movie"
+      );
       foundedMovie.Poster = copyedFile.FilePath;
     }
 

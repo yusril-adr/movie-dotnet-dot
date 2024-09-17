@@ -10,11 +10,11 @@ public class DecodedToken
   public long? id { get; set; }
 }
 
-public class TokenService
+public class TokenHelper
 {
   private IConfiguration _configuration;
 
-  public TokenService(IConfiguration configuration)
+  public TokenHelper(IConfiguration configuration)
   {
     _configuration = configuration;
   }

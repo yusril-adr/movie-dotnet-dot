@@ -10,38 +10,16 @@ namespace dot_dotnet_test_api.API.Version1.Services;
 public class UserService(
   IConfiguration configuration,
   UserRepository userRepository,
-  TokenService tokenService,
+  TokenHelper tokenHelper,
+  FileHelper fileHelper,
   ILogger<UserService> logger
 )
 {
   private readonly IConfiguration _configuration = configuration;
-
-  private readonly TokenService _tokenService = tokenService;
-
   private readonly UserRepository _userRepository = userRepository;
+  private readonly TokenHelper _tokenHelper = tokenHelper;
+  private readonly FileHelper _fileHelper = fileHelper;
   private readonly ILogger<UserService> _logger = logger;
-
-
-  private static async Task<AvatarFileResult> CopyAvatarFile(IFormFile avatar)
-  {
-    var splittedFileNames = avatar.FileName.Split(".");
-    var fileExtension = splittedFileNames[^1];
-    var filePath = Path.Combine("./files/images/avatar", $"{Path.GetRandomFileName()}-user.{fileExtension}");
-
-    using (var stream = File.Create(filePath))
-    {
-      await avatar.CopyToAsync(stream);
-    }
-
-    var savedSplitedFileNames = filePath.Split('/');
-    var savedFileName = savedSplitedFileNames[^1];
-
-    return new AvatarFileResult
-    {
-      FilePath = filePath,
-      SavedFileName = savedFileName
-    };
-  }
 
   private static string GetDeployedAvatarPath(string filePath, HttpRequest request)
   {
@@ -55,7 +33,11 @@ public class UserService(
 
   public async Task<ContentResult> Register(UserRegisterDto userRegisterDto, HttpRequest request)
   {
-    var avatarFileResult = await CopyAvatarFile(userRegisterDto.Avatar);
+    var avatarFileResult = await FileHelper.CopyFile(
+      file: userRegisterDto.Avatar,
+      path: "./files/images/avatar",
+      prefix: "user"
+    );
     var deployedFilePath = GetDeployedAvatarPath(avatarFileResult.FilePath, request);
 
     var createdUser = new User()
@@ -111,7 +93,7 @@ public class UserService(
     var deployedFilePath = GetDeployedAvatarPath(foundedUser.Avatar, request);
 
     return new Response<LoginResult>(
-        data: LoginResult.MapJson(foundedUser, deployedFilePath, _tokenService.CreateToken(foundedUser.Id)),
+        data: LoginResult.MapJson(foundedUser, deployedFilePath, _tokenHelper.CreateToken(foundedUser.Id)),
         message: "Login Success"
     ).GetFormated();
   }
