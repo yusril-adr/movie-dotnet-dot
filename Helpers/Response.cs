@@ -30,11 +30,11 @@ public class Response<T> : IResponse<T?>
   {
     Message = message;
     Data = data;
-    if (error != null)
+    if (!string.IsNullOrEmpty(error))
     {
       Error = error;
     }
-    Success = error == null;
+    Success = string.IsNullOrEmpty(error);
   }
 
   public ContentResult GetFormated(int statusCode = 200)

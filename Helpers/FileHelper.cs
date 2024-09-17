@@ -12,7 +12,7 @@ public class FileHelper()
   {
     var splittedFileNames = file.FileName.Split(".");
     var fileExtension = splittedFileNames[^1];
-    var filePath = Path.Combine(path, $"{Path.GetRandomFileName()}{(prefix != null ? $"-{prefix}" : "")}.{fileExtension}");
+    var filePath = Path.Combine(path, $"{Path.GetRandomFileName()}{(!string.IsNullOrEmpty(prefix) ? $"-{prefix}" : "")}.{fileExtension}");
 
     using (var stream = File.Create(filePath))
     {

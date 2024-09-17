@@ -62,7 +62,7 @@ public class MovieRepository(
   {
     IQueryable<Movie> movieQuery = _context.Movie;
 
-    if (keyword != null)
+    if (!string.IsNullOrEmpty(keyword))
     {
       movieQuery = movieQuery.Where(movie => EF.Functions.Like(movie.Title, $"%{keyword}%"));
     }

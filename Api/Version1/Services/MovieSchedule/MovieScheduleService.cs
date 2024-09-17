@@ -68,7 +68,7 @@ public class MovieScheduleService(
       }
     });
 
-    if (error != null)
+    if (string.IsNullOrEmpty(error))
     {
       return new Response<object>(
           error: error,
