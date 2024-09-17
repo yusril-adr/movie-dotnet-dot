@@ -23,7 +23,7 @@ public class EmailInvocable : IInvocableWithPayload<EmailMessage>, IInvocable
 
   public async Task Invoke()
   {
-    Console.WriteLine("Email send");
     await _smtpClient.SendMailAsync(_configuration["Gmail:email"]!, Payload.To, Payload.Subject, Payload.Body);
+    Console.WriteLine("Email send");
   }
 }
