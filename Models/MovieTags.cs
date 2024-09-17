@@ -12,10 +12,16 @@ public class MovieTags
     [Required]
     public long? Id { get;set; }
 
-    [ForeignKey("movie_id")]
+    [Column("movie_id", TypeName = "bigint")]
+    public long? MovieId { get; set; }
+
+    [ForeignKey(nameof(MovieId))]
     public virtual Movie? Movie { get; set; }
 
-    [ForeignKey("tag_id")]
+    [Column("tag_id", TypeName = "bigint")]
+    public long? TagId { get; set; }
+
+    [ForeignKey(nameof(TagId))]
     public virtual Tag? Tag { get; set; }
 
 

@@ -13,10 +13,16 @@ public class OrderItems
     [Required]
     public long? Id { get;set; }
 
-    [ForeignKey("order_id")]
+    [Column("order_id", TypeName = "bigint")]
+    public long? OrderId { get;set; }
+
+    [ForeignKey(nameof(OrderId))]
     public virtual Order? Order { get; set; }
 
-    [ForeignKey("movie_schedule_id")]
+    [Column("movie_schedule_id", TypeName = "bigint")]
+    public long? MovieScheduleId { get;set; }
+
+    [ForeignKey(nameof(MovieScheduleId))]
     public virtual MovieSchedule? MovieSchedule { get; set; }
 
     [Column("qty")]

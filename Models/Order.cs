@@ -12,7 +12,10 @@ public class Order
     [Required]
     public long? Id { get;set; }
 
-    [ForeignKey("user_id")]
+    [Column("user_id", TypeName = "bigint")]
+    public long? UserId { get;set; }
+
+    [ForeignKey(nameof(UserId))]
     public virtual User? User { get; set; }
 
     [Column("total_item_price")]

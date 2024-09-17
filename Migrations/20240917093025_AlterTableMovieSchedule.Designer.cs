@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dot_dotnet_test_api.Contexts;
 
@@ -11,9 +12,11 @@ using dot_dotnet_test_api.Contexts;
 namespace dot_dotnet_test_api.Migrations
 {
     [DbContext(typeof(SQLServerContext))]
-    partial class SQLServerContextModelSnapshot : ModelSnapshot
+    [Migration("20240917093025_AlterTableMovieSchedule")]
+    partial class AlterTableMovieSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,22 +70,12 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 9981L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5580),
                             Overview = "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
-                            PlayUntil = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
+                            PlayUntil = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5580),
                             Poster = "https://image.tmdb.org/t/p/original/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
                             Title = "Avengers: Age of Ultron",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160)
-                        },
-                        new
-                        {
-                            Id = 24428L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
-                            Overview = "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
-                            PlayUntil = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7160),
-                            Poster = "https://image.tmdb.org/t/p/original/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
-                            Title = "The Avengers",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7170)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5580)
                         });
                 });
 
@@ -149,54 +142,28 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7260),
-                            Date = new DateOnly(2024, 9, 17),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5700),
+                            Date = new DateOnly(1, 1, 1),
                             EndTime = "17:00",
                             MovieId = 9981L,
                             Price = 15000,
                             RemainingSeat = 50,
                             StartTime = "15:00",
                             StudioId = 1L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7260)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5700)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7290),
-                            Date = new DateOnly(2024, 9, 17),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5710),
+                            Date = new DateOnly(1, 1, 1),
                             EndTime = "17:10",
                             MovieId = 9981L,
                             Price = 15000,
                             RemainingSeat = 50,
                             StartTime = "15:10",
                             StudioId = 2L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7290)
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7270),
-                            Date = new DateOnly(2024, 9, 17),
-                            EndTime = "10:00",
-                            MovieId = 24428L,
-                            Price = 15000,
-                            RemainingSeat = 50,
-                            StartTime = "08:00",
-                            StudioId = 1L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7270)
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7300),
-                            Date = new DateOnly(2024, 9, 17),
-                            EndTime = "10:30",
-                            MovieId = 24428L,
-                            Price = 15000,
-                            RemainingSeat = 50,
-                            StartTime = "08:30",
-                            StudioId = 2L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7300)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5710)
                         });
                 });
 
@@ -217,35 +184,23 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_at");
 
-                    b.Property<long?>("MovieId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("movie_id");
-
-                    b.Property<long?>("TagId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("tag_id");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
+                    b.Property<long?>("movie_id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("tag_id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("movie_id");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("tag_id");
 
                     b.ToTable("movie_tags");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7210),
-                            MovieId = 9981L,
-                            TagId = 1L,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7210)
-                        });
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.Order", b =>
@@ -273,25 +228,14 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("user_id");
+                    b.Property<long?>("user_id")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("user_id");
 
                     b.ToTable("orders");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7310),
-                            TotalItemPrice = 60000,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7310),
-                            UserId = 1L
-                        });
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.OrderItems", b =>
@@ -311,14 +255,6 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_at");
 
-                    b.Property<long?>("MovieScheduleId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("movie_schedule_id");
-
-                    b.Property<long?>("OrderId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("order_id");
-
                     b.Property<int?>("Price")
                         .HasColumnType("int")
                         .HasColumnName("price");
@@ -335,35 +271,19 @@ namespace dot_dotnet_test_api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
+                    b.Property<long?>("movie_schedule_id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("order_id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieScheduleId");
+                    b.HasIndex("movie_schedule_id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("order_id");
 
                     b.ToTable("order_items");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7330),
-                            MovieScheduleId = 1L,
-                            OrderId = 1L,
-                            Qty = 3,
-                            SubTotalPrice = 45000,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7330)
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7340),
-                            MovieScheduleId = 3L,
-                            OrderId = 1L,
-                            Qty = 1,
-                            SubTotalPrice = 15000,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7340)
-                        });
                 });
 
             modelBuilder.Entity("dot_dotnet_test_api.Models.Studio", b =>
@@ -403,34 +323,34 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7220),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5640),
                             SeatCapacity = 50,
                             StudioNumber = 1,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7220)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5640)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7230),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5650),
                             SeatCapacity = 50,
                             StudioNumber = 2,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7230)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5650)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7240),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5670),
                             SeatCapacity = 50,
                             StudioNumber = 3,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7240)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5670)
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7250),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5670),
                             SeatCapacity = 50,
                             StudioNumber = 4,
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7250)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5670)
                         });
                 });
 
@@ -468,23 +388,23 @@ namespace dot_dotnet_test_api.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7090),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5510),
                             Name = "Action",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7100)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5520)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5560),
                             Name = "Comedy",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5560)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5570),
                             Name = "Fantasy",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 183, DateTimeKind.Local).AddTicks(7140)
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 28, DateTimeKind.Local).AddTicks(5570)
                         });
                 });
 
@@ -545,13 +465,13 @@ namespace dot_dotnet_test_api.Migrations
                         {
                             Id = 1L,
                             Avatar = "./files/images/avatar/example.png",
-                            CreatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 173, DateTimeKind.Local).AddTicks(8760),
+                            CreatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 18, DateTimeKind.Local).AddTicks(4550),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@getnada.com",
                             Is_admin = false,
                             Name = "user test",
-                            Password = "hJ/YEEHqSaSEx6+hEn1c5XdO3siizSMdTbzI1jwTtTZbkAmHhbKytJB1rn+ERZ+p",
-                            UpdatedAt = new DateTime(2024, 9, 17, 17, 8, 32, 173, DateTimeKind.Local).AddTicks(8770)
+                            Password = "9sUfeIqtk3uw/R6BYXBz346icTkUnBhGo3hxZOpj7kC+4Itebiw8V80o65A/+cuI",
+                            UpdatedAt = new DateTime(2024, 9, 17, 16, 30, 25, 18, DateTimeKind.Local).AddTicks(4590)
                         });
                 });
 
@@ -574,11 +494,11 @@ namespace dot_dotnet_test_api.Migrations
                 {
                     b.HasOne("dot_dotnet_test_api.Models.Movie", "Movie")
                         .WithMany("MovieTags")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("movie_id");
 
                     b.HasOne("dot_dotnet_test_api.Models.Tag", "Tag")
                         .WithMany("MovieTag")
-                        .HasForeignKey("TagId");
+                        .HasForeignKey("tag_id");
 
                     b.Navigation("Movie");
 
@@ -589,7 +509,7 @@ namespace dot_dotnet_test_api.Migrations
                 {
                     b.HasOne("dot_dotnet_test_api.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("user_id");
 
                     b.Navigation("User");
                 });
@@ -598,11 +518,11 @@ namespace dot_dotnet_test_api.Migrations
                 {
                     b.HasOne("dot_dotnet_test_api.Models.MovieSchedule", "MovieSchedule")
                         .WithMany()
-                        .HasForeignKey("MovieScheduleId");
+                        .HasForeignKey("movie_schedule_id");
 
                     b.HasOne("dot_dotnet_test_api.Models.Order", "Order")
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("order_id");
 
                     b.Navigation("MovieSchedule");
 

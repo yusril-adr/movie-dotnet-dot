@@ -12,10 +12,16 @@ public class MovieSchedule
     [Required]
     public long? Id { get;set; }
 
-    [ForeignKey("movie_id")]
+    [Column("movie_id", TypeName = "bigint")]
+    public long? MovieId { get;set; }
+
+    [ForeignKey(nameof(MovieId))]
     public virtual Movie? Movie { get; set; }
 
-    [ForeignKey("studio_id")]
+    [Column("studio_id", TypeName = "bigint")]
+    public long? StudioId { get;set; }
+
+    [ForeignKey(nameof(StudioId))]
     public virtual Studio? Studio { get; set; }
 
     [Column("remaining_Seat")]
@@ -31,7 +37,7 @@ public class MovieSchedule
     public int Price { get; set; }
 
     [Column("date")]
-    public DateOnly Date { get; set; }
+    public required DateOnly Date { get; set; }
 
     [Column("created_at")]
     public DateTime? CreatedAt { get; set; } = DateTime.Now;
