@@ -71,11 +71,13 @@ public class PaginationResponse<T>
   public T? Items { get; set; }
 
   public IPagination? Pagination { get; set; } = null;
-public PaginationResponse(T items, Pagination pagination, string? message = default)
+  public object? Meta { get; set; } = null;
+public PaginationResponse(T items, Pagination pagination, string? message = default, object? meta = default)
   {
     Message = message;
     Items = items;
     Pagination = pagination;
+    Meta = meta;
   }
 
   public ContentResult GetFormated(int statusCode = 200)
@@ -104,6 +106,7 @@ public PaginationResponse(T items, Pagination pagination, string? message = defa
       Data = new {
         items = this.Items,
         pagination = this.Pagination,
+        meta = this.Meta,
       },
     }, settings);
     return jsonResponse;

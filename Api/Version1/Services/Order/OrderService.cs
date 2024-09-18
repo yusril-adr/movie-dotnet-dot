@@ -198,6 +198,7 @@ public class OrderService (
     }
 
     var incomes = await _orderRepository.FindOrderIncome(startDate, endDate, page, perPage);
+    var totalIncome = await _orderRepository.SumOrderIncome(startDate, endDate);
 
     return new PaginationResponse<List<OrderIncome>>(
         items: incomes,
@@ -208,6 +209,9 @@ public class OrderService (
           PerPage = perPage,
           TotalItem = tagCount,
           TotalPages = totalPage
+        },
+        meta: new {
+          total_income = totalIncome,
         }
     ).GetFormated();
   } 

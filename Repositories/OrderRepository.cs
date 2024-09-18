@@ -35,7 +35,7 @@ public class OrderRepository(IConfiguration configuration, SQLServerContext cont
 
     var query = from date in allDates
                 join order in _context.Order
-                    on date equals DateOnly.FromDateTime((DateTime) order.CreatedAt!) into orderGroup
+                    on date equals DateOnly.FromDateTime((DateTime)order.CreatedAt!) into orderGroup
                 from order in orderGroup.DefaultIfEmpty() // Ensure all dates are included
                 .Where(order => order == null
                   || (order.CreatedAt >= startDate.ToDateTime(TimeOnly.MinValue)
@@ -58,12 +58,24 @@ public class OrderRepository(IConfiguration configuration, SQLServerContext cont
 
     return result;
   }
-
   public async Task<int> CountOrderIncome(DateOnly startDate, DateOnly endDate)
   {
     var query = QueryOrderIncomePerDate(startDate, endDate);
     var result = query.Count();
 
     return result;
+  }
+
+  public async Task<int> SumOrderIncome(DateOnly startDate, DateOnly endDate)
+  {
+    var totalIncome = await (
+      from order in _context.Order
+      where order.CreatedAt >= startDate.ToDateTime(TimeOnly.MinValue) &&
+            order.CreatedAt <= endDate.ToDateTime(TimeOnly.MinValue)
+      select order.TotalItemPrice
+    )
+    .SumAsync();
+
+    return totalIncome != null ? (int) totalIncome : 0;
   }
 }
