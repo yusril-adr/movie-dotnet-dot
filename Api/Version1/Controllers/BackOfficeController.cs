@@ -23,6 +23,7 @@ namespace dot_dotnet_test_api.API.Version1.Controllers
         StudioService studioService,
         TagService tagService,
         MovieScheduleService movieScheduleService,
+        OrderService orderService,
         ILogger<BackOfficeController> logger
     ) : ControllerBase
     {
@@ -31,6 +32,7 @@ namespace dot_dotnet_test_api.API.Version1.Controllers
         private readonly MovieService _movieService = movieService;
         private readonly StudioService _studioService = studioService;
         private readonly TagService _tagService = tagService;
+        private readonly OrderService _orderService = orderService;
         private readonly MovieScheduleService _movieScheduleService = movieScheduleService;
 
         // GET: api/v1/backoffice/studios
@@ -117,5 +119,17 @@ namespace dot_dotnet_test_api.API.Version1.Controllers
 
             return await _movieService.UpdateMovie(movieId, movieBackOfficeUpdateDto, Request);
         }
+    
+        // GET: api/v1/backoffice/incomes
+        [HttpGet("incomes")]
+        public async Task<ContentResult> GetBackOfficeIncome(DateOnlyRangeDto dateOnlyRangeDto)
+        {
+            var validator = new DateOnlyValidator();
+            ValidationResult results = validator.Validate(dateOnlyRangeDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get Back Office Income Per date Failed");
+
+            return await _orderService.GetIncomePerDate(dateOnlyRangeDto);
+        }    
     }
 }

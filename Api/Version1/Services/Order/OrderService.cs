@@ -124,13 +124,13 @@ public class OrderService (
 
       var startTime = DateTime.Parse($"{foundedSchedule.Date.ToString()} {foundedSchedule.StartTime}");
 
-      // if (DateTime.Now >= startTime)
-      // {
-      //   return new Response<object>(
-      //       error: $"Movie Schedule with id {item.MovieScheduleId} already passed.",
-      //       message: "Checkout Order Failed"
-      //   ).GetFormated(StatusCodes.Status400BadRequest);
-      // }
+      if (DateTime.Now >= startTime)
+      {
+        return new Response<object>(
+            error: $"Movie Schedule with id {item.MovieScheduleId} already passed.",
+            message: "Checkout Order Failed"
+        ).GetFormated(StatusCodes.Status400BadRequest);
+      }
 
       if (foundedSchedule.RemainingSeat < item.Qty)
       {
@@ -180,4 +180,35 @@ public class OrderService (
         message: "Checkout Order Success"
     ).GetFormated();
   }
+
+  public async Task<ContentResult> GetIncomePerDate(DateOnlyRangeDto dateOnlyRangeDto) {
+    var page = dateOnlyRangeDto.Page;
+    var perPage = dateOnlyRangeDto.PerPage;
+    var startDate = (DateOnly) dateOnlyRangeDto.StartDate!;
+    var endDate = (DateOnly) dateOnlyRangeDto.EndDate!;
+    var tagCount = await _orderRepository.CountOrderIncome(startDate, endDate);
+    var totalPage = (int) Math.Ceiling((double)tagCount / perPage);
+
+    if (page > totalPage)
+    {
+      return new Response<object>(
+          message: "Get Box Office Income Per Date Failed",
+          error: "page is out of range"
+      ).GetFormated(StatusCodes.Status400BadRequest);
+    }
+
+    var incomes = await _orderRepository.FindOrderIncome(startDate, endDate, page, perPage);
+
+    return new PaginationResponse<List<OrderIncome>>(
+        items: incomes,
+        message: "Get Back Office Income Per Date Success",
+        pagination: new Pagination
+        {
+          Page = page,
+          PerPage = perPage,
+          TotalItem = tagCount,
+          TotalPages = totalPage
+        }
+    ).GetFormated();
+  } 
 }
