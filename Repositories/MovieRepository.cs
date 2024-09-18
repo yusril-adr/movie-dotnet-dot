@@ -187,14 +187,11 @@ public class MovieRepository(
   {
     var query = QueryBestSellerList(startDate, endDate);
 
-    // Apply Pagination: Skip and Take
     var offset = (page - 1) * perPage;
     var paginatedResult = await query
       .Skip(offset)
       .Take(perPage)
       .ToListAsync();
-
-    // Console.WriteLine(paginatedResult)
 
     return paginatedResult;
   }
