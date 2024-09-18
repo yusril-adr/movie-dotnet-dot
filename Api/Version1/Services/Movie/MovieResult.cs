@@ -1,5 +1,6 @@
 
 using dot_dotnet_test_api.Models;
+using dot_dotnet_test_api.Repositories;
 using Newtonsoft.Json;
 
 namespace dot_dotnet_test_api.API.Version1.Services;
@@ -67,6 +68,27 @@ public class MovieListResult {
     };
   }
 }
+
+public class BestSellerMovieListResult: MovieListResult {
+  [JsonProperty("tags")]
+  public new virtual MovieTagResult[] Tags { get; set; } = [];
+  
+  [JsonProperty("total_ticket_sold")]
+  public int TotalTicketsSold { get; set; }
+
+  public static BestSellerMovieListResult MapJson(BestSellerMovie movie) {
+    return new BestSellerMovieListResult {
+      Id = (long) movie.Id!,
+      Title = movie.Title!,
+      Poster = movie.Poster!,
+      Overview = movie.Overview!,
+      PlayUntil = (DateTime) movie.PlayUntil!,
+      TotalTicketsSold = movie.TotalTicketsSold,
+      Tags = movie.Tags.Select(tag => new MovieTagResult { Id = (long) tag.Id!, Name = tag.Name! }).ToArray(),
+    };
+  }
+}
+
 
 public class MovieUpdateResult: MovieListResult {
   public static MovieUpdateResult MapJson(Movie movie, string deployedFilePath) {

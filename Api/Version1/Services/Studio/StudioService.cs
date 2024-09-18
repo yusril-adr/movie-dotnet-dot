@@ -50,4 +50,36 @@ public class StudioService (
         }
     ).GetFormated();
   }
+
+  public async Task<ContentResult> GetStudioBestSellerList(DateOnlyRangeDto dateOnlyRangeDto)
+  {
+    var page = dateOnlyRangeDto.Page;
+    var perPage = dateOnlyRangeDto.PerPage;
+    var startDate = (DateOnly) dateOnlyRangeDto.StartDate!;
+    var endDate = (DateOnly) dateOnlyRangeDto.EndDate!;
+    var tagCount = await _studioRepository.CountStudioBestSeller(startDate, endDate);
+    var totalPage = (int) Math.Ceiling((double)tagCount / perPage);
+
+    if (page > totalPage)
+    {
+      return new Response<object>(
+          message: "Get Box Office Best Seller Studio Failed",
+          error: "page is out of range"
+      ).GetFormated(StatusCodes.Status400BadRequest);
+    }
+
+    var studioList = await _studioRepository.FindStudioBestSeller(startDate, endDate, page, perPage);
+
+    return new PaginationResponse<List<StudioBestSellerResult>>(
+        items: studioList.Select(StudioBestSellerResult.MapJson).ToList(),
+        message: "Get Back Office Best Seller Studio Success",
+        pagination: new Pagination
+        {
+          Page = page,
+          PerPage = perPage,
+          TotalItem = tagCount,
+          TotalPages = totalPage
+        }
+    ).GetFormated();
+  }
 }

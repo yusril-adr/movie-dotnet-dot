@@ -53,11 +53,31 @@ public class MovieService(
     return mappedResult;
   }
 
+  private static List<BestSellerMovie> MapPosterPath(List<BestSellerMovie> movieList, HttpRequest request)
+  {
+    List<BestSellerMovie> mappedResult = movieList;
+
+    int idx = 0;
+    foreach (var movie in movieList.ToList())
+    {
+      if (movie.Poster!.StartsWith("./"))
+      {
+        movie.Poster = GetDeployedPosterPath(movie, request);
+        mappedResult[idx] = movie;
+      }
+
+      idx++;
+    }
+
+    return mappedResult;
+  }
+
+
   public async Task<ContentResult> GetMovieList(PaginationDto paginationDto, HttpRequest request)
   {
     var page = paginationDto.Page;
     var perPage = paginationDto.PerPage;
-    var movieCount = await _movieRepository.Count();
+    var movieCount = await _movieRepository.CountAll();
     var totalPage = (int)Math.Ceiling((double)movieCount / perPage);
 
     if (page > totalPage)
@@ -82,7 +102,44 @@ public class MovieService(
           TotalPages = totalPage,
         }
     ).GetFormated();
+  }
 
+  public async Task<ContentResult> GetBestSellerMovieList(DateOnlyRangeDto dateOnlyRangeDto, HttpRequest request) {
+    var page = dateOnlyRangeDto.Page;
+    var perPage = dateOnlyRangeDto.PerPage;
+    var movieCount = await _movieRepository.CountBestSellerList(
+      startDate: (DateOnly) dateOnlyRangeDto.StartDate!,
+      endDate: (DateOnly) dateOnlyRangeDto.EndDate!
+    );
+    var totalPage = (int) Math.Ceiling((double)movieCount / perPage);
+
+    if (page > totalPage)
+    {
+      return new Response<object>(
+          message: "Get Back Office Best Seller Movies Failed",
+          error: "page is out of range"
+      ).GetFormated(StatusCodes.Status400BadRequest);
+    }
+
+    var movieList = await _movieRepository.FindBestSeller(
+      (DateOnly) dateOnlyRangeDto.StartDate!,
+      (DateOnly) dateOnlyRangeDto.EndDate!,
+      page,
+      perPage
+    );
+    movieList = MapPosterPath(movieList, request);
+
+    return new PaginationResponse<BestSellerMovieListResult[]>(
+      items: movieList.Select(BestSellerMovieListResult.MapJson).ToArray(),
+      message: "Get Back Office Best Seller Movies Success",
+      pagination: new Pagination
+      {
+        Page = page,
+        PerPage = perPage,
+        TotalItem = movieCount,
+        TotalPages = totalPage,
+      }
+    ).GetFormated();
   }
 
   public async Task<ContentResult> GetMovieListWithSchedules(MovieListDto movieListDto, HttpRequest request)

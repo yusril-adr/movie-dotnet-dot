@@ -124,13 +124,13 @@ public class OrderService (
 
       var startTime = DateTime.Parse($"{foundedSchedule.Date.ToString()} {foundedSchedule.StartTime}");
 
-      if (DateTime.Now >= startTime)
-      {
-        return new Response<object>(
-            error: $"Movie Schedule with id {item.MovieScheduleId} already passed.",
-            message: "Checkout Order Failed"
-        ).GetFormated(StatusCodes.Status400BadRequest);
-      }
+      // if (DateTime.Now >= startTime)
+      // {
+      //   return new Response<object>(
+      //       error: $"Movie Schedule with id {item.MovieScheduleId} already passed.",
+      //       message: "Checkout Order Failed"
+      //   ).GetFormated(StatusCodes.Status400BadRequest);
+      // }
 
       if (foundedSchedule.RemainingSeat < item.Qty)
       {

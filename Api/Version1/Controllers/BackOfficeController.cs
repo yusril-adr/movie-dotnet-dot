@@ -43,7 +43,19 @@ namespace dot_dotnet_test_api.API.Version1.Controllers
             if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get BackOffice Studios Failed");
 
             return await _studioService.GetStudios(paginationDto);
-        }    
+        }   
+
+        // GET: api/v1/backoffice/studios/best-seller
+        [HttpGet("studios/best-seller")]
+        public async Task<ContentResult> GetBackOfficeStudioBestSeller(DateOnlyRangeDto dateOnlyRangeDto)
+        {
+            var validator = new DateOnlyValidator();
+            ValidationResult results = validator.Validate(dateOnlyRangeDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get Back Office Best Seller Studio Failed");
+
+            return await _studioService.GetStudioBestSellerList(dateOnlyRangeDto);
+        }     
 
         // GET: api/v1/backoffice/movies
         [HttpGet("movies")]
@@ -57,6 +69,19 @@ namespace dot_dotnet_test_api.API.Version1.Controllers
             return await _movieService.GetMovieList(paginationDto, Request);
         }
         
+        // GET: api/v1/backoffice/movies/best-seller
+        [HttpGet("movies/best-seller")]
+        public async Task<ContentResult> GetBackOfficeBestSellerMovie(DateOnlyRangeDto dateOnlyRangeDto)
+        {
+            var validator = new DateOnlyValidator();
+            ValidationResult results = validator.Validate(dateOnlyRangeDto);
+
+            if (!results.IsValid) return ValidationHelper.ValidateResponseError(results, "Get Back Office Best Seller Movies Failed");
+
+            return await _movieService.GetBestSellerMovieList(dateOnlyRangeDto, Request);
+        }
+        
+
         // GET: api/v1/backoffice/tags
         [HttpGet("tags")]
         public async Task<ContentResult> GetBackOfficeTags(PaginationDto paginationDto)
